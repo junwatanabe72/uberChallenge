@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  react-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/src
+    ports:
+      - "3001:3001"
+    command: sh -c "PORT=3001 yarn start"
+    tty: true
