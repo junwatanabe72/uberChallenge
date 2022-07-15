@@ -1,4 +1,4 @@
-import { fetchUrl } from "../../utils/constant";
+import { fetchUrl } from "../utils/constant";
 
 export const fetchData = async (
   cal: React.Dispatch<React.SetStateAction<any[]>>

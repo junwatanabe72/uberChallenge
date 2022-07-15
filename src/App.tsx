@@ -5,7 +5,7 @@ import GoogleMapComponent from "./components/pages";
 
 const App: React.FC = () => {
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="lg">
       <Box>
         <GoogleMapComponent />
       </Box>
