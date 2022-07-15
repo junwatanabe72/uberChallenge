@@ -2,28 +2,11 @@ import React, { Children, cloneElement, isValidElement, useRef } from "react";
 
 interface MapProps extends google.maps.MapOptions {
   style: { [key: string]: string };
+  onDragend?: (map: google.maps.Map) => void;
   onClick?: (e: google.maps.MapMouseEvent) => void;
-  onIdle?: (map: google.maps.Map) => void;
   children?: React.ReactNode;
 }
 
-// const deepCompareEqualsForMaps = createCustomEqual(
-//   (deepEqual) => (a: any, b: any) => {
-//     if (
-//       isLatLngLiteral(a) ||
-//       a instanceof google.maps.LatLng ||
-//       isLatLngLiteral(b) ||
-//       b instanceof google.maps.LatLng
-//     ) {
-//       return new google.maps.LatLng(a).equals(new google.maps.LatLng(b));
-//     }
-
-//     // TODO extend to other types
-
-//     // use fast-equals for other objects
-//     return deepEqual(a, b);
-//   }
-// );
 const deepCompareEqualsForMaps = (a: any, b: any) => {
   return new google.maps.LatLng(a).equals(new google.maps.LatLng(b));
 };
@@ -46,7 +29,7 @@ function useDeepCompareEffectForMaps(
 
 const GoogleMapComponent: React.FC<MapProps> = ({
   onClick,
-  onIdle,
+  onDragend,
   children,
   style,
   ...options
@@ -66,19 +49,18 @@ const GoogleMapComponent: React.FC<MapProps> = ({
   }, [map, options]);
   React.useEffect(() => {
     if (map) {
-      ["click", "idle"].forEach((eventName) =>
+      ["click", "dragend"].forEach((eventName) =>
         google.maps.event.clearListeners(map, eventName)
       );
-
       if (onClick) {
         map.addListener("click", onClick);
       }
-
-      if (onIdle) {
-        map.addListener("idle", () => onIdle(map));
+      if (onDragend) {
+        console.log("dragend");
+        map.addListener("dragend", () => onDragend(map));
       }
     }
-  }, [map, onClick, onIdle]);
+  }, [map, onClick, onDragend]);
   return (
     <>
       <div ref={ref} style={style} />
