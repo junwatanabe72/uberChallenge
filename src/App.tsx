@@ -1,14 +1,16 @@
-import React from "react";
+import React, { Suspense } from "react";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-
-import GoogleMapComponent from "./components/pages";
+import CircularProgress from "@mui/material/CircularProgress";
+import FoodTrunksLoader from "./hooks/FoodTrunksLoader";
 
 const App: React.FC = () => {
   return (
-    <Container maxWidth="sm">
-      <Box>
-        <GoogleMapComponent />
+    <Container maxWidth="lg">
+      <Box sx={{ display: "flex" }}>
+        <Suspense fallback={<CircularProgress />}>
+          <FoodTrunksLoader />
+        </Suspense>
       </Box>
     </Container>
   );

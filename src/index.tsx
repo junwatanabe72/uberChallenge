@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { ThemeProvider } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
-import Head from "./components/templates/Head";
+// import Head from "./components/templates/Head";
 import GlobalStyles from "./utils/styled/GolbalStyles";
 import theme from "./utils/styled/theme";
 import App from "./App";
@@ -15,7 +15,7 @@ root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <GlobalStyles />
-      <Head />
+      {/* <Head /> */}
       <CssBaseline />
       <App />
     </ThemeProvider>
