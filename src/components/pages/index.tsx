@@ -1,4 +1,5 @@
 import React, { useState, ReactElement } from "react";
+import Box from "@mui/material/Box";
 import { Wrapper, Status } from "@googlemaps/react-wrapper";
 import CircularProgress from "@mui/material/CircularProgress";
 import GoogleMapComponent from "../templates/googleMap/GMap";
@@ -6,6 +7,7 @@ import Circle from "../templates/googleMap/Circle";
 import Marker from "../templates/googleMap/Marker";
 import { sortNearFoodTrunks } from "../../hooks/sortTrunks";
 import { defaultPositions } from "../../utils/constant";
+import FoodTrunksList from "../organisms/FoodTrunksList";
 
 interface Props {
   foodTrunks: FoodTrunkPropety[];
@@ -18,13 +20,18 @@ const render = (status: Status): ReactElement => {
 
 const TopPage: React.FC<Props> = ({ foodTrunks }) => {
   const [clicks, setClicks] = useState<google.maps.LatLng[]>([]);
-  const [zoom, setZoom] = useState(13); // initial zoom
+  const [zoom, setZoom] = useState(14); // initial zoom
   const [center, setCenter] = useState<google.maps.LatLngLiteral>({
     ...defaultPositions,
   });
   const [nearFoodTrunks, setNearFoodTrunks] = useState<FoodTrunkPropety[]>([]);
   const onClick = (e: google.maps.MapMouseEvent) => {
-    setClicks([...clicks, e.latLng!]);
+    const { latLng } = e;
+    if (latLng === null) {
+      return;
+    }
+    // const targetGeo = latLng.toJSON();
+    setClicks([...clicks, latLng]);
   };
   const onDragend = (m: google.maps.Map) => {
     const targetGeo = m.getCenter()!.toJSON();
@@ -45,14 +52,17 @@ const TopPage: React.FC<Props> = ({ foodTrunks }) => {
   } as const;
 
   return (
-    <div style={{ display: "flex", height: "100%" }}>
+    <>
       <Wrapper apiKey={process.env.REACT_APP_API_KEY as string} render={render}>
         <GoogleMapComponent
           center={center}
           onClick={onClick}
           onDragend={onDragend}
+          gestureHandling={"cooperative"}
+          minZoom={11}
+          maxZoom={16}
           zoom={zoom}
-          style={{ height: "50vh", width: "90vw" }}
+          style={{ height: "47vh" }}
         >
           <Marker position={center} />
           <Circle {...circleOptions} />
@@ -72,7 +82,11 @@ const TopPage: React.FC<Props> = ({ foodTrunks }) => {
           })}
         </GoogleMapComponent>
       </Wrapper>
-    </div>
+      <Box sx={{ display: "flex" }}>
+        <FoodTrunksList foodTrunks={nearFoodTrunks} />
+        <FoodTrunksList foodTrunks={nearFoodTrunks} />
+      </Box>
+    </>
   );
 };
 

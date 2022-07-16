@@ -1,9 +1,8 @@
 import React, { Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
 import CircularProgress from "@mui/material/CircularProgress";
 import FoodTrunksLoader from "./hooks/FoodTrunksLoader";
+import Layout from "./components/templates/Layout";
 
 const App: React.FC = () => {
   return (
@@ -12,16 +11,14 @@ const App: React.FC = () => {
         <Route
           path="/"
           element={
-            <Container maxWidth="lg">
-              <Box sx={{ display: "flex" }}>
-                <Suspense fallback={<CircularProgress />}>
-                  <FoodTrunksLoader />
-                </Suspense>
-              </Box>
-            </Container>
+            <Layout>
+              <Suspense fallback={<CircularProgress />}>
+                <FoodTrunksLoader />
+              </Suspense>
+            </Layout>
           }
         ></Route>
-        <Route path="/*" element={<div>not found</div>}></Route>
+        <Route path="/*" element={<Layout>not found</Layout>}></Route>
       </Routes>
     </Router>
   );
