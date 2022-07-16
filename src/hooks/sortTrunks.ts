@@ -39,7 +39,7 @@ export const sortNearFoodTrunks = (
     );
     return aDistance < bDistance ? -1 : 1;
   });
-  return Array.from({ length: number - 1 }).map((_, num) => {
+  return Array.from({ length: number }).map((_, num) => {
     return result[num];
   });
 };

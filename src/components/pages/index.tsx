@@ -8,6 +8,7 @@ import Marker from "../templates/googleMap/Marker";
 import { sortNearFoodTrunks } from "../../hooks/sortTrunks";
 import { defaultPositions } from "../../utils/constant";
 import FoodTrunksList from "../organisms/FoodTrunksList";
+import GeneralTable from "../organisms/FoodTrunksTable";
 
 interface Props {
   foodTrunks: FoodTrunkPropety[];
@@ -21,6 +22,7 @@ const render = (status: Status): ReactElement => {
 const TopPage: React.FC<Props> = ({ foodTrunks }) => {
   const [clicks, setClicks] = useState<google.maps.LatLng[]>([]);
   const [zoom, setZoom] = useState(14); // initial zoom
+  const [selectStoreNumber, setSelectStoreNumber] = useState(11);
   const [center, setCenter] = useState<google.maps.LatLngLiteral>({
     ...defaultPositions,
   });
@@ -30,6 +32,7 @@ const TopPage: React.FC<Props> = ({ foodTrunks }) => {
     if (latLng === null) {
       return;
     }
+    setSelectStoreNumber(0);
     // const targetGeo = latLng.toJSON();
     setClicks([...clicks, latLng]);
   };
@@ -60,7 +63,7 @@ const TopPage: React.FC<Props> = ({ foodTrunks }) => {
           onDragend={onDragend}
           gestureHandling={"cooperative"}
           minZoom={11}
-          maxZoom={16}
+          maxZoom={20}
           zoom={zoom}
           style={{ height: "47vh" }}
         >
@@ -68,6 +71,7 @@ const TopPage: React.FC<Props> = ({ foodTrunks }) => {
           <Circle {...circleOptions} />
           {Object.values(nearFoodTrunks).map((marker, i) => {
             const { latitude, longitude } = marker;
+            console.log(nearFoodTrunks);
             return (
               <Marker
                 key={i}
@@ -84,7 +88,9 @@ const TopPage: React.FC<Props> = ({ foodTrunks }) => {
       </Wrapper>
       <Box sx={{ display: "flex" }}>
         <FoodTrunksList foodTrunks={nearFoodTrunks} />
-        <FoodTrunksList foodTrunks={nearFoodTrunks} />
+        {selectStoreNumber < 11 && (
+          <GeneralTable foodTrunk={nearFoodTrunks[selectStoreNumber]} />
+        )}
       </Box>
     </>
   );

@@ -12,14 +12,14 @@ interface Props {
 const FoodTrunksList: React.FC<Props> = ({ foodTrunks }) => {
   return (
     <Box sx={{ width: "50%", bgcolor: "background.paper" }}>
+      <ListSubheader>{`Near Food Trunks`}</ListSubheader>
       <nav>
         <List
           sx={{
             overflow: "auto",
-            height: "50vh",
+            height: "43vh",
           }}
         >
-          <ListSubheader>{`Near Food Trunks`}</ListSubheader>
           {foodTrunks.map((trunk, num) => {
             return (
               <ListItem key={num} disablePadding>
