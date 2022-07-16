@@ -1,18 +1,26 @@
 import React, { Suspense } from "react";
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import FoodTrunksLoader from "./hooks/FoodTrunksLoader";
+import Layout from "./components/templates/Layout";
 
 const App: React.FC = () => {
   return (
-    <Container maxWidth="lg">
-      <Box sx={{ display: "flex" }}>
-        <Suspense fallback={<CircularProgress />}>
-          <FoodTrunksLoader />
-        </Suspense>
-      </Box>
-    </Container>
+    <Router>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <Layout>
+              <Suspense fallback={<CircularProgress />}>
+                <FoodTrunksLoader />
+              </Suspense>
+            </Layout>
+          }
+        ></Route>
+        <Route path="/*" element={<Layout>not found</Layout>}></Route>
+      </Routes>
+    </Router>
   );
 };
 

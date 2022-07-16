@@ -2,6 +2,11 @@ export const appTitle = "";
 export const description = "";
 export const imagePath = "";
 export const url = "";
+// San Francisco City Hall
+export const defaultPositions = {
+  lat: 37.779384443562826,
+  lng: -122.41926798915804,
+};
 export const fetchUrl = "https://data.sfgov.org/resource/rqzj-sfat.json";
 export const testProperty = {
   objectid: "1571753",
