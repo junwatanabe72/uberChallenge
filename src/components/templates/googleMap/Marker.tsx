@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-
 const Marker: React.FC<google.maps.MarkerOptions> = (options) => {
   const [marker, setMarker] = useState<google.maps.Marker>();
 

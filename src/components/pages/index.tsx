@@ -1,8 +1,9 @@
 import React, { useState, ReactElement } from "react";
 import { Wrapper, Status } from "@googlemaps/react-wrapper";
 import CircularProgress from "@mui/material/CircularProgress";
-import Marker from "../templates/googleMap/Marker";
 import GoogleMapComponent from "../templates/googleMap/GMap";
+import Circle from "../templates/googleMap/Circle";
+import Marker from "../templates/googleMap/Marker";
 
 interface Props {
   foodTrunks: FoodTrunkPropety[];
@@ -27,7 +28,7 @@ const TopPage: React.FC<Props> = ({ foodTrunks }) => {
   const randomArray = () => {
     const min = 1;
     const max = 400;
-    return Array.from({ length: 10 }).map((i) => {
+    return Array.from({ length: 100 }).map((i) => {
       const a = Math.floor(Math.random() * (max + 1 - min)) + min;
       return foodTrunks[a];
     });
@@ -44,6 +45,14 @@ const TopPage: React.FC<Props> = ({ foodTrunks }) => {
   };
   const image =
     "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png";
+  const circleOptions = {
+    strokeColor: "#FF0000",
+    strokeOpacity: 0.8,
+    strokeWeight: 2,
+    fillOpacity: 0,
+    center: center,
+    radius: 300,
+  } as const;
 
   return (
     <div style={{ display: "flex", height: "100%" }}>
@@ -56,6 +65,7 @@ const TopPage: React.FC<Props> = ({ foodTrunks }) => {
           style={{ height: "50vh", width: "90vw" }}
         >
           <Marker position={center} />
+          <Circle {...circleOptions} />
           {Object.values(nearFoodTrunks).map((marker, i) => {
             const { latitude, longitude } = marker;
             return (

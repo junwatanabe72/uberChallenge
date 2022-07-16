@@ -1,4 +1,11 @@
-import React, { Children, cloneElement, isValidElement, useRef } from "react";
+import React, {
+  Children,
+  useState,
+  useEffect,
+  cloneElement,
+  isValidElement,
+  useRef,
+} from "react";
 
 interface MapProps extends google.maps.MapOptions {
   style: { [key: string]: string };
@@ -12,7 +19,7 @@ const deepCompareEqualsForMaps = (a: any, b: any) => {
 };
 
 function useDeepCompareMemoize(value: any) {
-  const ref = React.useRef();
+  const ref = useRef();
 
   if (!deepCompareEqualsForMaps(value, ref.current)) {
     ref.current = value;
@@ -24,6 +31,7 @@ function useDeepCompareEffectForMaps(
   callback: React.EffectCallback,
   dependencies: any[]
 ) {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   React.useEffect(callback, dependencies.map(useDeepCompareMemoize));
 }
 
@@ -35,9 +43,9 @@ const GoogleMapComponent: React.FC<MapProps> = ({
   ...options
 }) => {
   const ref = useRef() as any;
-  const [map, setMap] = React.useState<google.maps.Map>();
+  const [map, setMap] = useState<google.maps.Map>();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (ref.current && !map) {
       setMap(new window.google.maps.Map(ref.current, {}));
     }
@@ -47,7 +55,7 @@ const GoogleMapComponent: React.FC<MapProps> = ({
       map.setOptions(options);
     }
   }, [map, options]);
-  React.useEffect(() => {
+  useEffect(() => {
     if (map) {
       ["click", "dragend"].forEach((eventName) =>
         google.maps.event.clearListeners(map, eventName)

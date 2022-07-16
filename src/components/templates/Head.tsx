@@ -1,9 +1,10 @@
 import React from "react";
+import { Helmet } from "react-helmet-async";
 import { appTitle, description, imagePath, url } from "../../utils/constant";
 
 const Head: React.FC = () => {
   return (
-    <head>
+    <Helmet>
       <meta charSet="utf-8" />
       <title>{appTitle}</title>
       <link rel="canonical" href="" />
@@ -28,7 +29,7 @@ const Head: React.FC = () => {
         rel="stylesheet"
         href="https://fonts.googleapis.com/icon?family=Material+Icons"
       />
-    </head>
+    </Helmet>
   );
 };
 export default Head;
