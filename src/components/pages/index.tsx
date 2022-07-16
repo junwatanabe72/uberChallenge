@@ -5,14 +5,11 @@ import GoogleMapComponent from "../templates/googleMap/GMap";
 import Circle from "../templates/googleMap/Circle";
 import Marker from "../templates/googleMap/Marker";
 import { sortNearFoodTrunks } from "../../hooks/sortTrunks";
+import { defaultPositions } from "../../utils/constant";
 
 interface Props {
   foodTrunks: FoodTrunkPropety[];
 }
-const defaultCenter = {
-  lat: 37.72387884083248,
-  lng: 237.57021237092852,
-};
 
 const render = (status: Status): ReactElement => {
   if (status === Status.FAILURE) return <>error</>;
@@ -23,7 +20,7 @@ const TopPage: React.FC<Props> = ({ foodTrunks }) => {
   const [clicks, setClicks] = useState<google.maps.LatLng[]>([]);
   const [zoom, setZoom] = useState(13); // initial zoom
   const [center, setCenter] = useState<google.maps.LatLngLiteral>({
-    ...defaultCenter,
+    ...defaultPositions,
   });
   const [nearFoodTrunks, setNearFoodTrunks] = useState<FoodTrunkPropety[]>([]);
   const onClick = (e: google.maps.MapMouseEvent) => {
