@@ -71,6 +71,7 @@ const TopPage: React.FC<Props> = ({ foodTrunks }) => {
             return (
               <Marker
                 key={i}
+                animation={google.maps.Animation.DROP}
                 position={{
                   lat: parseFloat(latitude),
                   lng: parseFloat(longitude),
