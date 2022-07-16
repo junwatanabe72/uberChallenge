@@ -4,6 +4,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import GoogleMapComponent from "../templates/googleMap/GMap";
 import Circle from "../templates/googleMap/Circle";
 import Marker from "../templates/googleMap/Marker";
+import { sortNearFoodTrunks } from "../../hooks/sortTrunks";
 
 interface Props {
   foodTrunks: FoodTrunkPropety[];
@@ -25,23 +26,15 @@ const TopPage: React.FC<Props> = ({ foodTrunks }) => {
     ...defaultCenter,
   });
   const [nearFoodTrunks, setNearFoodTrunks] = useState<FoodTrunkPropety[]>([]);
-  const randomArray = () => {
-    const min = 1;
-    const max = 400;
-    return Array.from({ length: 100 }).map((i) => {
-      const a = Math.floor(Math.random() * (max + 1 - min)) + min;
-      return foodTrunks[a];
-    });
-  };
   const onClick = (e: google.maps.MapMouseEvent) => {
     setClicks([...clicks, e.latLng!]);
   };
   const onDragend = (m: google.maps.Map) => {
+    const targetGeo = m.getCenter()!.toJSON();
     setZoom(m.getZoom()!);
-    setCenter(m.getCenter()!.toJSON());
-    const a = randomArray();
-    console.log(a);
-    setNearFoodTrunks(a);
+    setCenter(targetGeo);
+    const currentFoodTrunks = sortNearFoodTrunks(targetGeo, foodTrunks, 10);
+    setNearFoodTrunks(currentFoodTrunks);
   };
   const image =
     "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png";
