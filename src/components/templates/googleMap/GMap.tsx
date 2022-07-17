@@ -10,14 +10,17 @@ import React, {
 interface MapProps extends google.maps.MapOptions {
   style: { [key: string]: string };
   onDragend?: (map: google.maps.Map) => void;
+  onIdle?: (map: google.maps.Map) => void;
   onClick?: (e: google.maps.MapMouseEvent) => void;
   children?: React.ReactNode;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const deepCompareEqualsForMaps = (a: any, b: any) => {
   return new google.maps.LatLng(a).equals(new google.maps.LatLng(b));
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function useDeepCompareMemoize(value: any) {
   const ref = useRef();
 
@@ -29,6 +32,7 @@ function useDeepCompareMemoize(value: any) {
 
 function useDeepCompareEffectForMaps(
   callback: React.EffectCallback,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   dependencies: any[]
 ) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -37,11 +41,13 @@ function useDeepCompareEffectForMaps(
 
 const GoogleMapComponent: React.FC<MapProps> = ({
   onClick,
+  onIdle,
   onDragend,
   children,
   style,
   ...options
 }) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const ref = useRef() as any;
   const [map, setMap] = useState<google.maps.Map>();
 
@@ -57,7 +63,7 @@ const GoogleMapComponent: React.FC<MapProps> = ({
   }, [map, options]);
   useEffect(() => {
     if (map) {
-      ["click", "dragend"].forEach((eventName) =>
+      ["click", "idle", "dragend"].forEach((eventName) =>
         google.maps.event.clearListeners(map, eventName)
       );
       if (onClick) {
@@ -67,8 +73,11 @@ const GoogleMapComponent: React.FC<MapProps> = ({
         console.log("dragend");
         map.addListener("dragend", () => onDragend(map));
       }
+      if (onIdle) {
+        map.addListener("idle", () => onIdle(map));
+      }
     }
-  }, [map, onClick, onDragend]);
+  }, [map, onClick, onDragend, onIdle]);
   return (
     <>
       <div ref={ref} style={style} />
