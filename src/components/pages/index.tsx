@@ -5,12 +5,12 @@ import CircularProgress from "@mui/material/CircularProgress";
 import GoogleMapComponent from "../templates/googleMap/GMap";
 import Circle from "../templates/googleMap/Circle";
 import Marker from "../templates/googleMap/Marker";
-import { sortNearFoodTrunks } from "../../hooks/sortTrunks";
-import { defaultPositions } from "../../utils/constant";
 import FoodTrunksList from "../organisms/FoodTrunksList";
 import AlertDialog from "../atoms/CustomDialog";
 import CustomFab from "../atoms/CustomFab";
 import CenterStack from "../atoms/CenterStack";
+import { filterNearFoodTrunks } from "../../hooks/filterTrunks";
+import { defaultPositions } from "../../utils/constant";
 
 interface Props {
   foodTrunks: FoodTrunkPropety[];
@@ -25,6 +25,7 @@ const render = (status: Status): ReactElement => {
   );
 };
 
+const distance = 500;
 const TopPage: React.FC<Props> = ({ foodTrunks }) => {
   const [clicks, setClicks] = useState<google.maps.LatLng[]>([]);
   const [zoom, setZoom] = useState(14);
@@ -69,7 +70,11 @@ const TopPage: React.FC<Props> = ({ foodTrunks }) => {
       return;
     }
     console.log("search");
-    const currentFoodTrunks = sortNearFoodTrunks(tmpCenter, foodTrunks, 10);
+    const currentFoodTrunks = filterNearFoodTrunks(
+      tmpCenter,
+      foodTrunks,
+      distance
+    );
     setNearFoodTrunks(currentFoodTrunks);
     setSearchAction(false);
   };
@@ -90,7 +95,7 @@ const TopPage: React.FC<Props> = ({ foodTrunks }) => {
     strokeWeight: 2,
     fillOpacity: 0,
     center: center,
-    radius: 300,
+    radius: distance,
   } as const;
 
   return (
