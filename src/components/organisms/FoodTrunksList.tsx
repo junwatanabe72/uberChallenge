@@ -10,7 +10,7 @@ interface Props {
   foodTrunks: FoodTrunkPropety[];
   onClick: (num: number) => void;
 }
-const title = "Near Trunks List";
+const title = "Near Trunks";
 const FoodTrunksList: React.FC<Props> = ({ foodTrunks, onClick }) => {
   return (
     <Box sx={{ width: "100%", bgcolor: "background.paper" }}>
@@ -18,12 +18,12 @@ const FoodTrunksList: React.FC<Props> = ({ foodTrunks, onClick }) => {
         <List
           sx={{
             overflow: "auto",
-            height: "40vh",
+            height: "45vh",
           }}
           subheader={
             <ListSubheader
               color="primary"
-              sx={{ fontSize: "20px", paddingBottom: "0px" }}
+              sx={{ fontSize: "20px" }}
             >{`${title}`}</ListSubheader>
           }
         >

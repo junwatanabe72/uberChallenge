@@ -135,9 +135,11 @@ const TopPage: React.FC<Props> = ({ foodTrunks }) => {
           })}
         </GoogleMapComponent>
       </Wrapper>
-      <Box p={0} m={0}>
-        <FoodTrunksList onClick={onClickList} foodTrunks={nearFoodTrunks} />
-      </Box>
+      {nearFoodTrunks && (
+        <Box p={0} m={0}>
+          <FoodTrunksList onClick={onClickList} foodTrunks={nearFoodTrunks} />
+        </Box>
+      )}
       {nearFoodTrunks[selectStoreNumber] && (
         <AlertDialog
           open={open}
