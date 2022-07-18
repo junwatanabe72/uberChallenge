@@ -5,6 +5,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItem from "@mui/material/ListItem";
 import ListSubheader from "@mui/material/ListSubheader";
 import ListItemText from "@mui/material/ListItemText";
+import CenterStack from "../atoms/CenterStack";
 
 interface Props {
   foodTrunks: FoodTrunkPropety[];
@@ -27,24 +28,30 @@ const FoodTrunksList: React.FC<Props> = ({ foodTrunks, onClick }) => {
             >{`${title}`}</ListSubheader>
           }
         >
-          {foodTrunks.map((trunk, num) => {
-            return (
-              <ListItemButton
-                key={num}
-                onClick={() => {
-                  onClick(num);
-                }}
-                divider
-              >
-                <ListItem disablePadding>
-                  <ListItemText
-                    primary={`${num + 1}: ${trunk.applicant}`}
-                    secondary={`foodItems: ${trunk.fooditems}`}
-                  />
-                </ListItem>
-              </ListItemButton>
-            );
-          })}
+          {!foodTrunks.length ? (
+            <CenterStack>
+              <h1>Not Result</h1>
+            </CenterStack>
+          ) : (
+            foodTrunks.map((trunk, num) => {
+              return (
+                <ListItemButton
+                  key={num}
+                  onClick={() => {
+                    onClick(num);
+                  }}
+                  divider
+                >
+                  <ListItem disablePadding>
+                    <ListItemText
+                      primary={`${num + 1}: ${trunk.applicant}`}
+                      secondary={`foodItems: ${trunk.fooditems}`}
+                    />
+                  </ListItem>
+                </ListItemButton>
+              );
+            })
+          )}
         </List>
       </nav>
     </Box>
