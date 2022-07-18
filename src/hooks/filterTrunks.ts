@@ -32,7 +32,6 @@ export const filterNearFoodTrunks = (
       parseFloat(v.latitude),
       parseFloat(v.longitude)
     );
-    console.log(distance);
     return distance < number;
   });
   return tmp;

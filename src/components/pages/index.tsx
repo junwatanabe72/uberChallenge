@@ -25,6 +25,7 @@ const render = (status: Status): ReactElement => {
   );
 };
 
+const distance = 500;
 const TopPage: React.FC<Props> = ({ foodTrunks }) => {
   const [clicks, setClicks] = useState<google.maps.LatLng[]>([]);
   const [zoom, setZoom] = useState(14);
@@ -69,7 +70,11 @@ const TopPage: React.FC<Props> = ({ foodTrunks }) => {
       return;
     }
     console.log("search");
-    const currentFoodTrunks = filterNearFoodTrunks(tmpCenter, foodTrunks, 300);
+    const currentFoodTrunks = filterNearFoodTrunks(
+      tmpCenter,
+      foodTrunks,
+      distance
+    );
     setNearFoodTrunks(currentFoodTrunks);
     setSearchAction(false);
   };
@@ -90,7 +95,7 @@ const TopPage: React.FC<Props> = ({ foodTrunks }) => {
     strokeWeight: 2,
     fillOpacity: 0,
     center: center,
-    radius: 300,
+    radius: distance,
   } as const;
 
   return (
