@@ -10,17 +10,22 @@ interface Props {
   foodTrunks: FoodTrunkPropety[];
   onClick: (num: number) => void;
 }
-
+const title = "Near Trunks List";
 const FoodTrunksList: React.FC<Props> = ({ foodTrunks, onClick }) => {
   return (
     <Box sx={{ width: "100%", bgcolor: "background.paper" }}>
-      <ListSubheader>{`Near Food Trunks`}</ListSubheader>
       <nav>
         <List
           sx={{
             overflow: "auto",
-            height: "43vh",
+            height: "40vh",
           }}
+          subheader={
+            <ListSubheader
+              color="primary"
+              sx={{ fontSize: "20px", paddingBottom: "0px" }}
+            >{`${title}`}</ListSubheader>
+          }
         >
           {foodTrunks.map((trunk, num) => {
             return (
@@ -33,8 +38,8 @@ const FoodTrunksList: React.FC<Props> = ({ foodTrunks, onClick }) => {
               >
                 <ListItem disablePadding>
                   <ListItemText
-                    primary={`${num + 1}:  ${trunk.applicant}`}
-                    secondary={trunk.fooditems}
+                    primary={`${num + 1}: ${trunk.applicant}`}
+                    secondary={`foodItems: ${trunk.fooditems}`}
                   />
                 </ListItem>
               </ListItemButton>
