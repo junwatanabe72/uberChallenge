@@ -1,7 +1,5 @@
 import React, { useState, ReactElement } from "react";
 import Box from "@mui/material/Box";
-import { Fab } from "@mui/material";
-import NavigationIcon from "@mui/icons-material/Navigation";
 import { Wrapper, Status } from "@googlemaps/react-wrapper";
 import CircularProgress from "@mui/material/CircularProgress";
 import GoogleMapComponent from "../templates/googleMap/GMap";
@@ -11,6 +9,8 @@ import { sortNearFoodTrunks } from "../../hooks/sortTrunks";
 import { defaultPositions } from "../../utils/constant";
 import FoodTrunksList from "../organisms/FoodTrunksList";
 import AlertDialog from "../atoms/CustomDialog";
+import CustomFab from "../atoms/CustomFab";
+import CenterStack from "../atoms/CenterStack";
 
 interface Props {
   foodTrunks: FoodTrunkPropety[];
@@ -18,7 +18,11 @@ interface Props {
 
 const render = (status: Status): ReactElement => {
   if (status === Status.FAILURE) return <>error</>;
-  return <CircularProgress />;
+  return (
+    <CenterStack>
+      <CircularProgress />
+    </CenterStack>
+  );
 };
 
 const TopPage: React.FC<Props> = ({ foodTrunks }) => {
@@ -52,6 +56,11 @@ const TopPage: React.FC<Props> = ({ foodTrunks }) => {
   };
   const onIdle = (m: google.maps.Map) => {
     console.log("onIdle");
+    const tmpZoom = m.getZoom();
+    if (!tmpZoom) {
+      return;
+    }
+    setZoom(tmpZoom);
     if (!searchAction) {
       return;
     }
@@ -85,19 +94,14 @@ const TopPage: React.FC<Props> = ({ foodTrunks }) => {
   } as const;
 
   return (
-    <>
-      <Box sx={{ "& > :not(style)": { m: 1 } }}>
-        <Fab
-          variant="extended"
-          onClick={() => {
-            setSearchAction(true);
-            setSelectStoreNumber(0);
-          }}
-        >
-          <NavigationIcon sx={{ mr: 1 }} />
-          Navigate
-        </Fab>
-      </Box>
+    <div style={{ position: "relative" }}>
+      <CustomFab
+        title={"search"}
+        onClick={() => {
+          setSearchAction(true);
+          setSelectStoreNumber(0);
+        }}
+      />
       <Wrapper apiKey={process.env.REACT_APP_API_KEY as string} render={render}>
         <GoogleMapComponent
           center={center}
@@ -108,31 +112,16 @@ const TopPage: React.FC<Props> = ({ foodTrunks }) => {
           minZoom={11}
           maxZoom={20}
           zoom={zoom}
-          style={{ height: "47vh" }}
+          style={{ height: "45vh" }}
         >
           <Marker position={center} />
           <Circle {...circleOptions} />
           {Object.values(nearFoodTrunks).map((marker, i) => {
             const { latitude, longitude } = marker;
-            console.log(nearFoodTrunks);
             const icon =
               i === selectStoreNumber
-                ? {
-                    fillColor: "blue",
-                    fillOpacity: 0.8,
-                    path: google.maps.SymbolPath.CIRCLE,
-                    scale: 16,
-                    strokeColor: "blue",
-                    strokeWeight: 1.0,
-                  }
-                : {
-                    fillColor: "red",
-                    fillOpacity: 0.8,
-                    path: google.maps.SymbolPath.CIRCLE,
-                    scale: 16,
-                    strokeColor: "red",
-                    strokeWeight: 1.0,
-                  };
+                ? "https://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+                : "https://maps.google.com/mapfiles/ms/icons/red-dot.png";
             return (
               <Marker
                 key={i}
@@ -146,7 +135,7 @@ const TopPage: React.FC<Props> = ({ foodTrunks }) => {
           })}
         </GoogleMapComponent>
       </Wrapper>
-      <Box>
+      <Box p={0} m={0}>
         <FoodTrunksList onClick={onClickList} foodTrunks={nearFoodTrunks} />
       </Box>
       {nearFoodTrunks[selectStoreNumber] && (
@@ -156,7 +145,7 @@ const TopPage: React.FC<Props> = ({ foodTrunks }) => {
           handleClose={handleClose}
         />
       )}
-    </>
+    </div>
   );
 };
 

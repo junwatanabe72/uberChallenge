@@ -1,4 +1,4 @@
-export const appTitle = "";
+export const appTitle = "SearchFoodTrunks";
 export const description = "";
 export const imagePath = "";
 export const url = "";

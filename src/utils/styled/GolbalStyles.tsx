@@ -8,6 +8,7 @@ const global = () => css`
     line-height: 1.5;
     color: black;
     font-weight: 400;
+    text-transform: none;
   }
   body {
     padding: 0;
@@ -16,18 +17,22 @@ const global = () => css`
   h1 {
     padding: 0;
     margin: 0;
+    font-weight: 400;
   }
   h2 {
     padding: 0;
     margin: 0;
+    font-weight: 400;
   }
   h3 {
     padding: 0;
     margin: 0;
+    font-weight: 400;
   }
   h4 {
     padding: 0;
     margin: 0;
+    font-weight: 400;
   }
   ul {
     padding: 0;
@@ -45,7 +50,7 @@ const global = () => css`
   }
   a {
     text-decoration: none;
-    color: red;
+    color: black;
   }
   textarea {
     min-height: 150px;
