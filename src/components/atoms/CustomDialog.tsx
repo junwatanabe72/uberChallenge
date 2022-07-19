@@ -6,7 +6,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogActions from "@mui/material/DialogActions";
-import Dammy from "../../utils/images/dammy.jpg";
+import { dammyImage } from "../../utils/constant";
 
 interface Props {
   foodTrunk: FoodTrunkPropety;
@@ -39,7 +39,7 @@ const AlertDialog: React.FC<Props> = ({ foodTrunk, open, handleClose }) => {
       aria-describedby="alert-dialog-description"
     >
       <DialogTitle id="alert-dialog-title">{applicant}</DialogTitle>
-      <Image src={Dammy} alt="dammy" />
+      <Image src={dammyImage} alt="dammy" />
       <DialogContent>
         {Object.entries({ address, fooditems }).map(([title, value], num) => {
           return (

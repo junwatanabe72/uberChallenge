@@ -32,7 +32,8 @@ export const defaultGoogleMapOption = {
   minZoom: 11,
   maxZoom: 20,
 };
-
+export const dammyImage =
+  "https://res.cloudinary.com/dulbhhpbj/image/upload/v1658236910/cld-sample-4.jpg";
 export const markerIcon = (isTarget: boolean) => {
   if (isTarget) {
     return "https://maps.google.com/mapfiles/ms/icons/blue-dot.png";

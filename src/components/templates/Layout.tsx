@@ -18,7 +18,6 @@ const Layout: React.FC<Props> = ({ children }) => {
       <Box sx={{ height: "100vh" }}>
         <Box p={1}>
           <h2>
-            {" "}
             <a href="/">{appTitle}</a>
           </h2>
         </Box>

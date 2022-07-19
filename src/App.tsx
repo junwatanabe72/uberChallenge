@@ -5,7 +5,7 @@ import ErrorPage from "./components/pages/Error";
 import Layout from "./components/templates/Layout";
 import { fetchData } from "./hooks/fetch";
 
-const App: React.FC = () => {
+const App: React.FC = (): JSX.Element => {
   const [foodTrunks, setFoodTrunks] = useState<FoodTrunkPropety[]>([]);
 
   const initData = async () => {
