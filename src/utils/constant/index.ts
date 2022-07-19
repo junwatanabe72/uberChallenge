@@ -1,7 +1,7 @@
 export const appTitle = "SearchFoodTrunks";
 export const description = "search Food Trunks In SF";
 export const imagePath = "";
-export const url = "";
+export const siteUrl = "https://uberchallenge.netlify.app/";
 // San Francisco City Hall
 const defaultPositions = {
   lat: 37.779384443562826,

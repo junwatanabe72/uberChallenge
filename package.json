@@ -1,6 +1,6 @@
 {
   "name": "map",
-  "homepage": "https://junwatanabe72.github.io/uberChallenge",
+  "homepage": "https://uberchallenge.netlify.app/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
