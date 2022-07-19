@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.js": "/static/js/main.d24497a5.js",
-    "static/js/787.57d4d9af.chunk.js": "/static/js/787.57d4d9af.chunk.js",
-    "static/media/dammy.jpg": "/static/media/dammy.a3a74f673da5cc5fa7af.jpg",
-    "index.html": "/index.html",
-    "main.d24497a5.js.map": "/static/js/main.d24497a5.js.map",
-    "787.57d4d9af.chunk.js.map": "/static/js/787.57d4d9af.chunk.js.map"
+    "main.js": "/uberChallenge/static/js/main.ed938582.js",
+    "static/js/787.57d4d9af.chunk.js": "/uberChallenge/static/js/787.57d4d9af.chunk.js",
+    "static/media/dammy.jpg": "/uberChallenge/static/media/dammy.a3a74f673da5cc5fa7af.jpg",
+    "index.html": "/uberChallenge/index.html",
+    "main.ed938582.js.map": "/uberChallenge/static/js/main.ed938582.js.map",
+    "787.57d4d9af.chunk.js.map": "/uberChallenge/static/js/787.57d4d9af.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/main.d24497a5.js"
+    "static/js/main.ed938582.js"
   ]
 }
