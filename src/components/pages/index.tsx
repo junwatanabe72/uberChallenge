@@ -13,7 +13,7 @@ import { filterNearFoodTrunks } from "../../hooks/filterTrunks";
 import {
   defaultCircleOption,
   defaultGoogleMapOption,
-  defaultPositions,
+  defaultUserSetting,
   markerIcon,
   rangeOfCircle,
 } from "../../utils/constant";
@@ -31,35 +31,29 @@ const render = (status: Status): ReactElement => {
   );
 };
 
-const userSetting = {
-  zoom: 14,
-  selectStoreNumber: 0,
-  searchAction: false,
-  center: defaultPositions,
-};
-
 const TopPage: React.FC<Props> = ({ foodTrunks }) => {
-  const [clicks, setClicks] = useState<google.maps.LatLng[]>([]);
-  const [setting, setSetting] = useState(userSetting);
+  const [setting, setSetting] = useState(defaultUserSetting);
   const [nearFoodTrunks, setNearFoodTrunks] = useState<FoodTrunkPropety[]>([]);
   const [open, setOpen] = useState(false);
 
-  const handleClick = (open: boolean) => {
+  const handleModal = (open: boolean) => {
     setOpen(open);
   };
 
   const onClickList = (num: number) => {
     setSetting({ ...setting, selectStoreNumber: num });
-    handleClick(true);
+    handleModal(true);
   };
-  const onClick = (e: google.maps.MapMouseEvent) => {
-    const { latLng } = e;
-    if (latLng === null) {
+  const onClickMarker = (num: number) => {
+    console.log("onClick");
+    if (!nearFoodTrunks.length) {
       return;
     }
-    setClicks([...clicks, latLng]);
+    setSetting({ ...setting, selectStoreNumber: num });
+    handleModal(true);
+    return;
   };
-  const onIdle = (m: google.maps.Map) => {
+  const onMapIdle = (m: google.maps.Map) => {
     console.log("onIdle");
     const tmpZoom = m.getZoom();
     if (!tmpZoom) {
@@ -81,9 +75,10 @@ const TopPage: React.FC<Props> = ({ foodTrunks }) => {
       rangeOfCircle
     );
     setNearFoodTrunks(currentFoodTrunks);
-    setSetting({ ...setting, searchAction: false });
+    setSetting({ ...setting, searchAction: false, selectStoreNumber: -1 });
   };
-  const onDragend = (m: google.maps.Map) => {
+  const onMapDragend = (m: google.maps.Map) => {
+    console.log("onDragend");
     const tmpCenter = m.getCenter()?.toJSON();
     const tmpZoom = m.getZoom();
     if (!tmpCenter || !tmpZoom) {
@@ -105,9 +100,8 @@ const TopPage: React.FC<Props> = ({ foodTrunks }) => {
         <GoogleMapComponent
           {...defaultGoogleMapOption}
           center={setting.center}
-          onClick={onClick}
-          onIdle={onIdle}
-          onDragend={onDragend}
+          onIdle={onMapIdle}
+          onDragend={onMapDragend}
           zoom={setting.zoom}
           style={{ height: "45vh" }}
         >
@@ -118,6 +112,10 @@ const TopPage: React.FC<Props> = ({ foodTrunks }) => {
             return (
               <Marker
                 key={i}
+                onClick={() => {
+                  onClickMarker(i);
+                }}
+                clickable={true}
                 position={{
                   lat: parseFloat(latitude),
                   lng: parseFloat(longitude),
@@ -138,7 +136,7 @@ const TopPage: React.FC<Props> = ({ foodTrunks }) => {
           open={open}
           foodTrunk={nearFoodTrunks[setting.selectStoreNumber]}
           handleClose={() => {
-            handleClick(false);
+            handleModal(false);
           }}
         />
       )}

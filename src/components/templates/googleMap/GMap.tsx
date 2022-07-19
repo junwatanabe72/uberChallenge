@@ -70,7 +70,6 @@ const GoogleMapComponent: React.FC<MapProps> = ({
         map.addListener("click", onClick);
       }
       if (onDragend) {
-        console.log("dragend");
         map.addListener("dragend", () => onDragend(map));
       }
       if (onIdle) {

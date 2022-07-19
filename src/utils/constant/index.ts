@@ -3,12 +3,19 @@ export const description = "search Food Trunks In SF";
 export const imagePath = "";
 export const url = "";
 // San Francisco City Hall
-export const defaultPositions = {
+const defaultPositions = {
   lat: 37.779384443562826,
   lng: -122.41926798915804,
 };
 export const fetchUrl = "https://data.sfgov.org/resource/rqzj-sfat.json";
 export const rangeOfCircle = 500;
+
+export const defaultUserSetting = {
+  zoom: 14,
+  selectStoreNumber: -1,
+  searchAction: false,
+  center: defaultPositions,
+};
 export const defaultCircleOption = (posititon: google.maps.LatLngLiteral) => {
   return {
     strokeColor: "#FF0000",
