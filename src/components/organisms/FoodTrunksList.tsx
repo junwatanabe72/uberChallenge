@@ -19,7 +19,7 @@ const FoodTrunksList: React.FC<Props> = ({ foodTrunks, onClick }) => {
         <List
           sx={{
             overflow: "auto",
-            height: "45vh",
+            height: "40vh",
           }}
           subheader={
             <ListSubheader

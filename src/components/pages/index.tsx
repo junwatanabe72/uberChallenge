@@ -100,19 +100,20 @@ const TopPage: React.FC<Props> = ({ foodTrunks }) => {
 
   return (
     <div style={{ position: "relative" }}>
-      <CustomFab
-        title={"search"}
-        onClick={() => {
-          setSearchAction(true);
-          setSelectStoreNumber(0);
-        }}
-      />
       <Wrapper apiKey={process.env.REACT_APP_API_KEY as string} render={render}>
+        <CustomFab
+          title={"search"}
+          onClick={() => {
+            setSearchAction(true);
+            setSelectStoreNumber(0);
+          }}
+        />
         <GoogleMapComponent
           center={center}
           onClick={onClick}
           onIdle={onIdle}
           onDragend={onDragend}
+          streetViewControl={false}
           gestureHandling={"cooperative"}
           minZoom={11}
           maxZoom={20}
@@ -139,12 +140,12 @@ const TopPage: React.FC<Props> = ({ foodTrunks }) => {
             );
           })}
         </GoogleMapComponent>
+        {nearFoodTrunks && (
+          <Box p={0} m={0}>
+            <FoodTrunksList onClick={onClickList} foodTrunks={nearFoodTrunks} />
+          </Box>
+        )}
       </Wrapper>
-      {nearFoodTrunks && (
-        <Box p={0} m={0}>
-          <FoodTrunksList onClick={onClickList} foodTrunks={nearFoodTrunks} />
-        </Box>
-      )}
       {nearFoodTrunks[selectStoreNumber] && (
         <AlertDialog
           open={open}
