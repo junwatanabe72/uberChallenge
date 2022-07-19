@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-// import CircularProgress from "@mui/material/CircularProgress";
-// import FoodTrunksLoader from "./hooks/FoodTrunksLoader";
-import Layout from "./components/templates/Layout";
-import ErrorPage from "./components/pages/Error";
-import { fetchData } from "./hooks/fetch";
 import TopPage from "./components/pages";
-// import CenterStack from "./components/atoms/CenterStack";
+import ErrorPage from "./components/pages/Error";
+import Layout from "./components/templates/Layout";
+import { fetchData } from "./hooks/fetch";
 
 const App: React.FC = () => {
   const [foodTrunks, setFoodTrunks] = useState<FoodTrunkPropety[]>([]);
@@ -18,25 +15,33 @@ const App: React.FC = () => {
   useEffect(() => {
     initData();
   }, []);
+
+  const routeElement = {
+    top: {
+      path: "/",
+      component: (
+        <Layout>
+          <TopPage foodTrunks={foodTrunks} />
+        </Layout>
+      ),
+    },
+    other: {
+      path: "/*",
+      component: (
+        <Layout>
+          <ErrorPage errorNumber={404} />
+        </Layout>
+      ),
+    },
+  };
+
   return (
     <Router>
       <Routes>
-        <Route
-          path="/"
-          element={
-            <Layout>
-              <TopPage foodTrunks={foodTrunks} />
-            </Layout>
-          }
-        ></Route>
-        <Route
-          path="/*"
-          element={
-            <Layout>
-              <ErrorPage errorNumber={404} />
-            </Layout>
-          }
-        ></Route>
+        {Object.values(routeElement).map((element, num) => {
+          const { path, component } = element;
+          return <Route key={num} path={path} element={component}></Route>;
+        })}
       </Routes>
     </Router>
   );

@@ -10,7 +10,13 @@ import AlertDialog from "../atoms/CustomDialog";
 import CustomFab from "../atoms/CustomFab";
 import CenterStack from "../atoms/CenterStack";
 import { filterNearFoodTrunks } from "../../hooks/filterTrunks";
-import { defaultPositions } from "../../utils/constant";
+import {
+  defaultCircleOption,
+  defaultGoogleMapOption,
+  defaultUserSetting,
+  markerIcon,
+  rangeOfCircle,
+} from "../../utils/constant";
 
 interface Props {
   foodTrunks: FoodTrunkPropety[];
@@ -25,117 +31,96 @@ const render = (status: Status): ReactElement => {
   );
 };
 
-const distance = 500;
 const TopPage: React.FC<Props> = ({ foodTrunks }) => {
-  const [clicks, setClicks] = useState<google.maps.LatLng[]>([]);
-  const [zoom, setZoom] = useState(14);
-  const [selectStoreNumber, setSelectStoreNumber] = useState(0);
-  const [searchAction, setSearchAction] = useState<boolean>(false);
-  const [center, setCenter] = useState<google.maps.LatLngLiteral>({
-    ...defaultPositions,
-  });
+  const [setting, setSetting] = useState(defaultUserSetting);
   const [nearFoodTrunks, setNearFoodTrunks] = useState<FoodTrunkPropety[]>([]);
   const [open, setOpen] = useState(false);
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleModal = (open: boolean) => {
+    setOpen(open);
   };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
   const onClickList = (num: number) => {
-    setSelectStoreNumber(num);
-    handleClickOpen();
+    setSetting({ ...setting, selectStoreNumber: num });
+    handleModal(true);
   };
-  const onClick = (e: google.maps.MapMouseEvent) => {
-    const { latLng } = e;
-    if (latLng === null) {
+  const onClickMarker = (num: number) => {
+    console.log("onClick");
+    if (!nearFoodTrunks.length) {
       return;
     }
-    setClicks([...clicks, latLng]);
+    setSetting({ ...setting, selectStoreNumber: num });
+    handleModal(true);
+    return;
   };
-  const onIdle = (m: google.maps.Map) => {
+  const onMapIdle = (m: google.maps.Map) => {
     console.log("onIdle");
     const tmpZoom = m.getZoom();
     if (!tmpZoom) {
       return;
     }
-    setZoom(tmpZoom);
-    if (!searchAction) {
+    if (tmpZoom !== setting.zoom) {
+      setSetting({ ...setting, zoom: tmpZoom });
+    }
+    if (!setting.searchAction) {
       return;
     }
     const tmpCenter = m.getCenter()?.toJSON();
     if (!tmpCenter) {
       return;
     }
-    console.log("search");
     const currentFoodTrunks = filterNearFoodTrunks(
       tmpCenter,
       foodTrunks,
-      distance
+      rangeOfCircle
     );
     setNearFoodTrunks(currentFoodTrunks);
-    setSearchAction(false);
+    setSetting({ ...setting, searchAction: false, selectStoreNumber: -1 });
   };
-  const onDragend = (m: google.maps.Map) => {
+  const onMapDragend = (m: google.maps.Map) => {
+    console.log("onDragend");
     const tmpCenter = m.getCenter()?.toJSON();
     const tmpZoom = m.getZoom();
     if (!tmpCenter || !tmpZoom) {
       return;
     }
     const targetGeo = tmpCenter;
-    setZoom(tmpZoom);
-    setCenter(targetGeo);
+    setSetting({ ...setting, zoom: tmpZoom, center: targetGeo });
+    return;
   };
-
-  const circleOptions = {
-    strokeColor: "#FF0000",
-    strokeOpacity: 0.8,
-    strokeWeight: 2,
-    fillOpacity: 0,
-    center: center,
-    radius: distance,
-  } as const;
-
   return (
     <div style={{ position: "relative" }}>
       <Wrapper apiKey={process.env.REACT_APP_API_KEY as string} render={render}>
         <CustomFab
           title={"search"}
           onClick={() => {
-            setSearchAction(true);
-            setSelectStoreNumber(0);
+            setSetting({ ...setting, searchAction: true });
           }}
         />
         <GoogleMapComponent
-          center={center}
-          onClick={onClick}
-          onIdle={onIdle}
-          onDragend={onDragend}
-          streetViewControl={false}
-          gestureHandling={"cooperative"}
-          minZoom={11}
-          maxZoom={20}
-          zoom={zoom}
+          {...defaultGoogleMapOption}
+          center={setting.center}
+          onIdle={onMapIdle}
+          onDragend={onMapDragend}
+          zoom={setting.zoom}
           style={{ height: "45vh" }}
         >
-          <Marker position={center} />
-          <Circle {...circleOptions} />
+          <Marker position={setting.center} />
+          <Circle {...defaultCircleOption(setting.center)} />
           {Object.values(nearFoodTrunks).map((marker, i) => {
             const { latitude, longitude } = marker;
-            const icon =
-              i === selectStoreNumber
-                ? "https://maps.google.com/mapfiles/ms/icons/blue-dot.png"
-                : "https://maps.google.com/mapfiles/ms/icons/red-dot.png";
             return (
               <Marker
                 key={i}
+                onClick={() => {
+                  onClickMarker(i);
+                }}
+                clickable={true}
                 position={{
                   lat: parseFloat(latitude),
                   lng: parseFloat(longitude),
                 }}
-                icon={icon}
+                icon={markerIcon(i === setting.selectStoreNumber)}
               />
             );
           })}
@@ -146,11 +131,13 @@ const TopPage: React.FC<Props> = ({ foodTrunks }) => {
           </Box>
         )}
       </Wrapper>
-      {nearFoodTrunks[selectStoreNumber] && (
+      {nearFoodTrunks[setting.selectStoreNumber] && (
         <AlertDialog
           open={open}
-          foodTrunk={nearFoodTrunks[selectStoreNumber]}
-          handleClose={handleClose}
+          foodTrunk={nearFoodTrunks[setting.selectStoreNumber]}
+          handleClose={() => {
+            handleModal(false);
+          }}
         />
       )}
     </div>
