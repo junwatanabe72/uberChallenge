@@ -1,4 +1,4 @@
-export const appTitle = "SearchFoodTrunks";
+export const appTitle = "SearchFoodTrunks in SF";
 export const description = "search Food Trunks In SF";
 export const imagePath = "";
 export const siteUrl = "https://uberchallenge.netlify.app/";
