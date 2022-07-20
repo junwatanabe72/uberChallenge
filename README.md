@@ -46,6 +46,8 @@ google マップライブラリは「react-wrapper」を使用した。多くの
 
 [react-testing-libray](https://qiita.com/ossan-engineer/items/4757d7457fafd44d2d2f)
 
+[cypress](https://docs.cypress.io/guides/references/best-practices)
+
 ## 履歴書のリンクやプロフィールリンク
 
 [開発者 github](https://github.com/junwatanabe72)
@@ -65,10 +67,11 @@ google マップライブラリは「react-wrapper」を使用した。多くの
 - スマホで使用する際の height 調整（縦スクロールできてしまう）
 - 初期取得するトラック配列のキャッシュ化(できるか？)
 - 各種設定(head タグ内、pwa)
+- テストのコードの数
 
 ## その他（所感）
 
 - 初めての v18 で開発でした。「Suspense」なども使いたかったですが、一旦は控えました。
 - googlemap 関連のライブラリが多々あり、最初迷子になりました。
 - react-wapper の公式チュートリアルが非常に参考になりました。
-- フロントエンド側のテストは今後の課題。
+- フロントエンド側のテストスキルが足らない。react-testing-libray と cypress を学んでいきたい。

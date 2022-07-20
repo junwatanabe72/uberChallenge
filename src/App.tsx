@@ -26,11 +26,7 @@ const App: React.FC = (): JSX.Element => {
       path: "/",
       component: (
         <Layout>
-          {foodTrunks.length ? (
-            <TopPage foodTrunks={foodTrunks} />
-          ) : (
-            <ErrorPage />
-          )}
+          <TopPage foodTrunks={foodTrunks} />
         </Layout>
       ),
     },
