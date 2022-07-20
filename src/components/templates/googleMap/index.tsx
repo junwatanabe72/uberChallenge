@@ -1,18 +1,29 @@
-import React, { Children, cloneElement, isValidElement, useRef } from "react";
+import React, {
+  Children,
+  useState,
+  useEffect,
+  cloneElement,
+  isValidElement,
+  useRef,
+} from "react";
 
 interface MapProps extends google.maps.MapOptions {
   style: { [key: string]: string };
   onDragend?: (map: google.maps.Map) => void;
+  onDBlclick?: (e: google.maps.MapMouseEvent) => void;
+  onIdle?: (map: google.maps.Map) => void;
   onClick?: (e: google.maps.MapMouseEvent) => void;
   children?: React.ReactNode;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const deepCompareEqualsForMaps = (a: any, b: any) => {
   return new google.maps.LatLng(a).equals(new google.maps.LatLng(b));
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function useDeepCompareMemoize(value: any) {
-  const ref = React.useRef();
+  const ref = useRef();
 
   if (!deepCompareEqualsForMaps(value, ref.current)) {
     ref.current = value;
@@ -22,22 +33,27 @@ function useDeepCompareMemoize(value: any) {
 
 function useDeepCompareEffectForMaps(
   callback: React.EffectCallback,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   dependencies: any[]
 ) {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   React.useEffect(callback, dependencies.map(useDeepCompareMemoize));
 }
 
 const GoogleMapComponent: React.FC<MapProps> = ({
   onClick,
+  onIdle,
+  onDBlclick,
   onDragend,
   children,
   style,
   ...options
 }) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const ref = useRef() as any;
-  const [map, setMap] = React.useState<google.maps.Map>();
+  const [map, setMap] = useState<google.maps.Map>();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (ref.current && !map) {
       setMap(new window.google.maps.Map(ref.current, {}));
     }
@@ -47,23 +63,28 @@ const GoogleMapComponent: React.FC<MapProps> = ({
       map.setOptions(options);
     }
   }, [map, options]);
-  React.useEffect(() => {
+  useEffect(() => {
     if (map) {
-      ["click", "dragend"].forEach((eventName) =>
+      ["click", "idle", "dragend", "dblclick"].forEach((eventName) =>
         google.maps.event.clearListeners(map, eventName)
       );
       if (onClick) {
         map.addListener("click", onClick);
       }
+      if (onDBlclick) {
+        map.addListener("dblclick", onDBlclick);
+      }
       if (onDragend) {
-        console.log("dragend");
         map.addListener("dragend", () => onDragend(map));
       }
+      if (onIdle) {
+        map.addListener("idle", () => onIdle(map));
+      }
     }
-  }, [map, onClick, onDragend]);
+  }, [map, onClick, onDragend, onIdle, onDBlclick]);
   return (
     <>
-      <div ref={ref} style={style} />
+      <div ref={ref} style={style} id="map" />
       {Children.map(children, (child) => {
         if (isValidElement(child)) {
           return cloneElement(child, { map });

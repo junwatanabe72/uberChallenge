@@ -1,46 +1,78 @@
-# Getting Started with Create React App
+# App: searchFoodTrunk
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## アプリの概要と使い方
 
-## Available Scripts
+- 任意の地点における近場のフードトラック（以下「トラック」）を検索するアプリ。（対応範囲：アメリカ合衆国サンフランシスコ）
+- google マップ上の search ボタンをクリックするとマップ上にトラックの位置を示したマーカーが表示される。
+- ページ下部に検索されたトラックがリスト表示される。
+- マップ上のマーカーかリストのトラックをクリックすればトラック詳細が表示される。
 
-In the project directory, you can run:
+## バックエンドかフロントエンドか
 
-### `npm start`
+- フロントエンドを主眼としたプロジェクト。
+- バックエンド機能は実装していません。API からのデータ取得もフロント側で対応
+- ホスティングサイトを利用しているため、インフラやサーバー設定も行っていません。
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## 技術スタック
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### 開発環境
 
-### `npm test`
+docker にて nodejs 環境のあるコンテナを立ち上げて開発。  
+node.js のバージョンは stable である v16 環境を選定。
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- docker
+- docker-compose
+- node v16.15
 
-### `npm run build`
+### ライブラリ選定
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+React 最新バージョンである v18 環境にて開発。  
+設定ファイル以外は typescript を使用。  
+アプリのデザインは、マテリアルデザインでの統一感を意識し、mui（v5）を使用。
+google マップライブラリは「react-wrapper」を使用。  
+選定理由は googleMap デベロッパーページにて本ライブラリが紹介されていたため。
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- react v18.2
+- mui v5.8
+- @googlemaps/react-wrapper v1.1
+- typescript v4.7
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 参考にしたサイト
 
-### `npm run eject`
+[react-warapper](https://developers.google.com/maps/documentation/javascript/react-map?hl=ja)
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+[google-map-api](https://developers.google.com/maps/documentation/javascript/reference)
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+[mui](https://developers.google.com/maps/documentation/javascript/reference)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+[react-testing-libray](https://qiita.com/ossan-engineer/items/4757d7457fafd44d2d2f)
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+[cypress](https://docs.cypress.io/guides/references/best-practices)
 
-## Learn More
+## 履歴書のリンクやプロフィールリンク
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+[開発者 github](https://github.com/junwatanabe72)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+[アプリのリポジトリ](https://github.com/junwatanabe72/uberChallenge)
+
+[アプリページ](https://uberchallenge.netlify.app/)
+
+## 要求されていることで欠けていること
+
+- googlemap 上のマーカーにトラックの情報ウインドウ設定
+- 座標が同じトラックがあった場合のマーカー位置調整（現状重なってしまう）
+- 各トラックの詳細ページ（modal オープンで一次対応）
+- 対象エリア（サンフランシスコ）外で検索した場合の対応
+- view と store の分離（recoil ライブラリ導入）
+- 検索設定の変更
+- スマホで使用する際の height 調整（縦スクロールできてしまう）
+- 初期取得するトラック配列のキャッシュ化(できるか？)
+- 各種設定(head タグ内、pwa)
+- テストのコードの数
+
+## その他（所感）
+
+- 初めての v18 で開発でした。「Suspense」なども使いたかったですが、一旦は控えました。
+- googlemap 関連のライブラリが多々あり、最初迷子になりました。
+- react-wapper の公式チュートリアルが非常に参考になりました。
+- フロントエンド側のテストスキルが足らない。react-testing-libray と cypress を学んでいきたい。
