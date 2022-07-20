@@ -10,6 +10,7 @@ import React, {
 interface MapProps extends google.maps.MapOptions {
   style: { [key: string]: string };
   onDragend?: (map: google.maps.Map) => void;
+  onDBlclick?: (e: google.maps.MapMouseEvent) => void;
   onIdle?: (map: google.maps.Map) => void;
   onClick?: (e: google.maps.MapMouseEvent) => void;
   children?: React.ReactNode;
@@ -42,6 +43,7 @@ function useDeepCompareEffectForMaps(
 const GoogleMapComponent: React.FC<MapProps> = ({
   onClick,
   onIdle,
+  onDBlclick,
   onDragend,
   children,
   style,
@@ -63,11 +65,14 @@ const GoogleMapComponent: React.FC<MapProps> = ({
   }, [map, options]);
   useEffect(() => {
     if (map) {
-      ["click", "idle", "dragend"].forEach((eventName) =>
+      ["click", "idle", "dragend", "dblclick"].forEach((eventName) =>
         google.maps.event.clearListeners(map, eventName)
       );
       if (onClick) {
         map.addListener("click", onClick);
+      }
+      if (onDBlclick) {
+        map.addListener("dblclick", onDBlclick);
       }
       if (onDragend) {
         map.addListener("dragend", () => onDragend(map));
@@ -76,10 +81,10 @@ const GoogleMapComponent: React.FC<MapProps> = ({
         map.addListener("idle", () => onIdle(map));
       }
     }
-  }, [map, onClick, onDragend, onIdle]);
+  }, [map, onClick, onDragend, onIdle, onDBlclick]);
   return (
     <>
-      <div ref={ref} style={style} />
+      <div ref={ref} style={style} id="map" />
       {Children.map(children, (child) => {
         if (isValidElement(child)) {
           return cloneElement(child, { map });

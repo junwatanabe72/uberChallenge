@@ -24,6 +24,9 @@ export const filterNearFoodTrunks = (
   allFoodTrunks: FoodTrunkPropety[],
   number: number
 ) => {
+  if (!allFoodTrunks.length) {
+    return [];
+  }
   const { lat, lng } = targetDeo;
   const tmp = allFoodTrunks.filter((v) => {
     const distance = calDistance(

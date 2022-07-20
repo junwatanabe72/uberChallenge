@@ -1,10 +1,12 @@
 import React from "react";
 import styled from "@emotion/styled";
+import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import Dammy from "../../utils/images/dammy.jpg";
+import DialogActions from "@mui/material/DialogActions";
+import { dammyImage } from "../../utils/constant";
 
 interface Props {
   foodTrunk: FoodTrunkPropety;
@@ -14,7 +16,7 @@ interface Props {
 
 const Image = styled.img`
   width: auto;
-  height: 30vh;
+  height: 25vh;
   object-fit: cover;
 `;
 
@@ -25,7 +27,7 @@ const AlertDialog: React.FC<Props> = ({ foodTrunk, open, handleClose }) => {
       sx={{
         "& .MuiDialog-container": {
           justifyContent: "center",
-          alignItems: "center",
+          alignItems: "end",
           "& .MuiPaper-root": {
             width: "80%",
           },
@@ -37,7 +39,7 @@ const AlertDialog: React.FC<Props> = ({ foodTrunk, open, handleClose }) => {
       aria-describedby="alert-dialog-description"
     >
       <DialogTitle id="alert-dialog-title">{applicant}</DialogTitle>
-      <Image src={Dammy} alt="dammy" />
+      <Image src={dammyImage} alt="dammy" />
       <DialogContent>
         {Object.entries({ address, fooditems }).map(([title, value], num) => {
           return (
@@ -52,6 +54,11 @@ const AlertDialog: React.FC<Props> = ({ foodTrunk, open, handleClose }) => {
           );
         })}
       </DialogContent>
+      <DialogActions>
+        <Button color={"secondary"} onClick={handleClose}>
+          Close
+        </Button>
+      </DialogActions>
     </Dialog>
   );
 };

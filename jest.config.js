@@ -3,21 +3,32 @@
  * https://jestjs.io/docs/configuration
  */
 
-export default {
+module.exports = {
   // All imported modules in your tests should be mocked automatically
   // automock: false,
-
   // Stop running tests after `n` failures
   // bail: 0,
+  // moduleNameMapper: {
+  //   "\\.(jpg|ico|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
+  //     "<rootDir>/__mocks__/fileMock.js",
+  //   "\\.(css|scss)$": "<rootDir>/__mocks__/styleMock.js",
+  // },
+  globals: {
+    google: {},
+    "ts-jest": {
+      useBabelrc: true,
+      tsConfigFile: "./tsconfig.jest.json",
+    },
+  },
   testEnvironment: "jsdom",
   // The directory where Jest should store its cached dependency information
   // cacheDirectory: "/tmp/jest_0",
   roots: ["<rootDir>/src"],
   // Automatically clear mock calls, instances, contexts and results before every test
   clearMocks: true,
-  transform: {
-    "^.+\\.(ts|tsx)$": "ts-jest",
-  },
+  // transform: {
+  //   "^.+\\.(ts|tsx)$": "ts-jest",
+  // },
   // Indicates whether the coverage information should be collected while executing the test
   collectCoverage: true,
 

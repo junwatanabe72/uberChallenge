@@ -17,9 +17,9 @@ const Layout: React.FC<Props> = ({ children }) => {
     <StyledContainer maxWidth="md">
       <Box sx={{ height: "100vh" }}>
         <Box p={1}>
-          <a href="/">
-            <h2>{appTitle}</h2>
-          </a>
+          <h2>
+            <a href="/">{appTitle}</a>
+          </h2>
         </Box>
         {children}
       </Box>

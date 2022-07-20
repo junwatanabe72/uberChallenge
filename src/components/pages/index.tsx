@@ -2,7 +2,7 @@ import React, { useState, ReactElement } from "react";
 import Box from "@mui/material/Box";
 import { Wrapper, Status } from "@googlemaps/react-wrapper";
 import CircularProgress from "@mui/material/CircularProgress";
-import GoogleMapComponent from "../templates/googleMap/GMap";
+import GoogleMapComponent from "../templates/googleMap";
 import Circle from "../templates/googleMap/Circle";
 import Marker from "../templates/googleMap/Marker";
 import FoodTrunksList from "../organisms/FoodTrunksList";
@@ -23,7 +23,7 @@ interface Props {
 }
 
 const render = (status: Status): ReactElement => {
-  if (status === Status.FAILURE) return <>error</>;
+  if (status === Status.FAILURE) return <CenterStack>Error</CenterStack>;
   return (
     <CenterStack>
       <CircularProgress />
@@ -88,6 +88,15 @@ const TopPage: React.FC<Props> = ({ foodTrunks }) => {
     setSetting({ ...setting, zoom: tmpZoom, center: targetGeo });
     return;
   };
+  const onDBlclick = (e: google.maps.MapMouseEvent) => {
+    console.log("onDBlclick");
+    if (e.latLng === null) {
+      return;
+    }
+    const tmpCenter = e.latLng.toJSON();
+    setSetting({ ...setting, center: tmpCenter });
+    return;
+  };
   return (
     <div style={{ position: "relative" }}>
       <Wrapper apiKey={process.env.REACT_APP_API_KEY as string} render={render}>
@@ -101,6 +110,7 @@ const TopPage: React.FC<Props> = ({ foodTrunks }) => {
           {...defaultGoogleMapOption}
           center={setting.center}
           onIdle={onMapIdle}
+          onDBlclick={onDBlclick}
           onDragend={onMapDragend}
           zoom={setting.zoom}
           style={{ height: "45vh" }}

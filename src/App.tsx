@@ -5,12 +5,17 @@ import ErrorPage from "./components/pages/Error";
 import Layout from "./components/templates/Layout";
 import { fetchData } from "./hooks/fetch";
 
-const App: React.FC = () => {
+const App: React.FC = (): JSX.Element => {
   const [foodTrunks, setFoodTrunks] = useState<FoodTrunkPropety[]>([]);
 
   const initData = async () => {
-    const result = await fetchData();
-    setFoodTrunks(result);
+    try {
+      const result = await fetchData();
+      setFoodTrunks(result);
+    } catch (error) {
+      console.log(error);
+      setFoodTrunks([]);
+    }
   };
   useEffect(() => {
     initData();

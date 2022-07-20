@@ -21,7 +21,6 @@ type FoodTrunkPropety = {
   priorpermit: string;
   expirationdate: string;
   location: {
-    string;
     latitude: string;
     longitude: string;
     human_address: string;
