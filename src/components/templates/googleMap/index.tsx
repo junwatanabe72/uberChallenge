@@ -84,7 +84,7 @@ const GoogleMapComponent: React.FC<MapProps> = ({
   }, [map, onClick, onDragend, onIdle, onDBlclick]);
   return (
     <>
-      <div ref={ref} style={style} />
+      <div ref={ref} style={style} id="map" />
       {Children.map(children, (child) => {
         if (isValidElement(child)) {
           return cloneElement(child, { map });

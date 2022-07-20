@@ -14,6 +14,7 @@ module.exports = {
   //   "\\.(css|scss)$": "<rootDir>/__mocks__/styleMock.js",
   // },
   globals: {
+    google: {},
     "ts-jest": {
       useBabelrc: true,
       tsConfigFile: "./tsconfig.jest.json",

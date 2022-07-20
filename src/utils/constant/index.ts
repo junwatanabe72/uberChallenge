@@ -3,7 +3,7 @@ export const description = "search Food Trunks In SF";
 export const imagePath = "";
 export const siteUrl = "https://uberchallenge.netlify.app/";
 // San Francisco City Hall
-const defaultPositions = {
+export const defaultPositions = {
   lat: 37.779384443562826,
   lng: -122.41926798915804,
 };
@@ -40,7 +40,7 @@ export const markerIcon = (isTarget: boolean) => {
   }
   return "https://maps.google.com/mapfiles/ms/icons/red-dot.png";
 };
-export const testProperty = {
+export const testProperty: FoodTrunkPropety = {
   objectid: "1571753",
   applicant: "The Geez Freeze",
   facilitytype: "Truck",

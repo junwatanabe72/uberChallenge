@@ -9,8 +9,13 @@ const App: React.FC = (): JSX.Element => {
   const [foodTrunks, setFoodTrunks] = useState<FoodTrunkPropety[]>([]);
 
   const initData = async () => {
-    const result = await fetchData();
-    setFoodTrunks(result);
+    try {
+      const result = await fetchData();
+      setFoodTrunks(result);
+    } catch (error) {
+      console.log(error);
+      setFoodTrunks([]);
+    }
   };
   useEffect(() => {
     initData();
@@ -21,7 +26,11 @@ const App: React.FC = (): JSX.Element => {
       path: "/",
       component: (
         <Layout>
-          <TopPage foodTrunks={foodTrunks} />
+          {foodTrunks.length ? (
+            <TopPage foodTrunks={foodTrunks} />
+          ) : (
+            <ErrorPage />
+          )}
         </Layout>
       ),
     },

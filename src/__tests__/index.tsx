@@ -1,35 +1,22 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
-// import { appTitle } from "../utils/constant";
-import Layout from "../components/templates/Layout";
+import { render, screen, waitFor } from "@testing-library/react";
+// import userEvent from "@testing-library/user-event";
+import GoogleMapComponent from "../components/templates/googleMap";
+import { defaultGoogleMapOption, defaultPositions } from "../utils/constant";
 
-describe("fetchData", () => {
-  test("renders App component", async () => {
+describe("App", () => {
+  test("fetches stories from an API and displays them", async () => {
     render(
-      <Layout>
-        <></>
-      </Layout>
+      <GoogleMapComponent
+        {...defaultGoogleMapOption}
+        center={defaultPositions}
+        style={{ height: "45vh" }}
+      />
     );
     screen.debug();
-    // expect(screen.getByText("SearchFoodTrunks in SF")).toBeInTheDocument();
+    await waitFor(() => {
+      screen.findByTestId("map");
+    });
+    screen.debug();
   });
 });
-
-// import { cleanup, fireEvent, render } from "@testing-library/react";
-// import CheckboxWithLabel from "../components/atoms/Link";
-
-// // Note: running cleanup afterEach is done automatically for you in @testing-library/react@9.0.0 or higher
-// // unmount and cleanup DOM after the test is finished.
-// afterEach(cleanup);
-
-// it("CheckboxWithLabel changes the text after click", () => {
-//   const { queryByLabelText, getByLabelText } = render(
-//     <CheckboxWithLabel labelOn="On" labelOff="Off" />
-//   );
-
-//   expect(queryByLabelText(/off/i)).toBeTruthy();
-
-//   fireEvent.click(getByLabelText(/off/i));
-
-//   expect(queryByLabelText(/on/i)).toBeTruthy();
-// });
