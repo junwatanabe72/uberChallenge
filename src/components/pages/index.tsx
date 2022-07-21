@@ -25,7 +25,7 @@ interface Props {
 const render = (status: Status): ReactElement => {
   if (status === Status.FAILURE) return <CenterStack>Error</CenterStack>;
   return (
-    <CenterStack>
+    <CenterStack height="50vw">
       <CircularProgress />
     </CenterStack>
   );

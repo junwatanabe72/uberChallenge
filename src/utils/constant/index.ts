@@ -9,7 +9,7 @@ export const defaultPositions = {
 };
 export const fetchUrl = "https://data.sfgov.org/resource/rqzj-sfat.json";
 export const rangeOfCircle = 500;
-
+export const foodTrnkListTextOfEmpty = "Not Result";
 export const defaultUserSetting = {
   zoom: 14,
   selectStoreNumber: -1,
