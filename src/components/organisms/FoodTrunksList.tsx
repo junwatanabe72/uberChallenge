@@ -6,6 +6,7 @@ import ListItem from "@mui/material/ListItem";
 import ListSubheader from "@mui/material/ListSubheader";
 import ListItemText from "@mui/material/ListItemText";
 import CenterStack from "../atoms/CenterStack";
+import { foodTrnkListTextOfEmpty } from "../../utils/constant";
 
 interface Props {
   foodTrunks: FoodTrunkPropety[];
@@ -30,7 +31,7 @@ const FoodTrunksList: React.FC<Props> = ({ foodTrunks, onClick }) => {
         >
           {!foodTrunks.length ? (
             <CenterStack>
-              <h1>Not Result</h1>
+              <h1>{foodTrnkListTextOfEmpty}</h1>
             </CenterStack>
           ) : (
             foodTrunks.map((trunk, num) => {

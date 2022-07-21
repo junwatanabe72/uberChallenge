@@ -8,22 +8,23 @@ export const defaultPositions = {
   lng: -122.41926798915804,
 };
 export const fetchUrl = "https://data.sfgov.org/resource/rqzj-sfat.json";
-export const rangeOfCircle = 500;
-
+const defaultRangeOfCircle = 500;
+export const foodTrnkListTextOfEmpty = "Not Result";
 export const defaultUserSetting = {
   zoom: 14,
   selectStoreNumber: -1,
   searchAction: false,
+  circleRange: defaultRangeOfCircle,
   center: defaultPositions,
 };
-export const defaultCircleOption = (posititon: google.maps.LatLngLiteral) => {
+export const defaultCircleOption = (setting: UserSetting) => {
   return {
     strokeColor: "#FF0000",
     strokeOpacity: 0.8,
     strokeWeight: 2,
     fillOpacity: 0,
-    center: posititon,
-    radius: rangeOfCircle,
+    center: setting.center,
+    radius: setting.circleRange,
   };
 };
 export const defaultGoogleMapOption = {
