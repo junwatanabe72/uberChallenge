@@ -31,3 +31,11 @@ type FoodTrunkPropety = {
   ":@computed_region_bh8s_q3mv": string;
   ":@computed_region_fyvs_ahh9": string;
 };
+
+type UserSetting = {
+  zoom: number;
+  selectStoreNumber: number;
+  searchAction: boolean;
+  circleRange: number;
+  center: { lat: number; lng: number };
+};

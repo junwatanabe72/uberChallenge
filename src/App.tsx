@@ -1,32 +1,26 @@
-import React, { useState, useEffect } from "react";
+import { CircularProgress } from "@mui/material";
+import React, { Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import CenterStack from "./components/atoms/CenterStack";
 import TopPage from "./components/pages";
 import ErrorPage from "./components/pages/Error";
 import Layout from "./components/templates/Layout";
-import { fetchData } from "./hooks/fetch";
 
 const App: React.FC = (): JSX.Element => {
-  const [foodTrunks, setFoodTrunks] = useState<FoodTrunkPropety[]>([]);
-
-  const initData = async () => {
-    try {
-      const result = await fetchData();
-      setFoodTrunks(result);
-    } catch (error) {
-      console.log(error);
-      setFoodTrunks([]);
-    }
-  };
-  useEffect(() => {
-    initData();
-  }, []);
-
   const routeElement = {
     top: {
       path: "/",
       component: (
         <Layout>
-          <TopPage foodTrunks={foodTrunks} />
+          <Suspense
+            fallback={
+              <CenterStack>
+                <CircularProgress />
+              </CenterStack>
+            }
+          >
+            <TopPage />
+          </Suspense>
         </Layout>
       ),
     },

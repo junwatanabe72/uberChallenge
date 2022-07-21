@@ -1,4 +1,11 @@
-import React, { useState, ReactElement } from "react";
+import React, { ReactElement } from "react";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import {
+  foodTrunkState,
+  modalState,
+  nearFoodTrunkState,
+  userSettingState,
+} from "../../store/atom";
 import Box from "@mui/material/Box";
 import { Wrapper, Status } from "@googlemaps/react-wrapper";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -13,44 +20,37 @@ import { filterNearFoodTrunks } from "../../hooks/filterTrunks";
 import {
   defaultCircleOption,
   defaultGoogleMapOption,
-  defaultUserSetting,
   markerIcon,
-  rangeOfCircle,
 } from "../../utils/constant";
 
-interface Props {
-  foodTrunks: FoodTrunkPropety[];
-}
+const gMapheight = "45vh";
 
 const render = (status: Status): ReactElement => {
   if (status === Status.FAILURE) return <CenterStack>Error</CenterStack>;
   return (
-    <CenterStack height="50vw">
+    <CenterStack height={gMapheight}>
       <CircularProgress />
     </CenterStack>
   );
 };
 
-const TopPage: React.FC<Props> = ({ foodTrunks }) => {
-  const [setting, setSetting] = useState(defaultUserSetting);
-  const [nearFoodTrunks, setNearFoodTrunks] = useState<FoodTrunkPropety[]>([]);
-  const [open, setOpen] = useState(false);
-
-  const handleModal = (open: boolean) => {
-    setOpen(open);
-  };
+const TopPage: React.FC = () => {
+  const foodTrunks = useRecoilValue(foodTrunkState);
+  const setModalState = useSetRecoilState(modalState);
+  const [userSetting, setUserSetting] = useRecoilState(userSettingState);
+  const [nearFoodTrunks, setNearFoodTrunk] = useRecoilState(nearFoodTrunkState);
 
   const onClickList = (num: number) => {
-    setSetting({ ...setting, selectStoreNumber: num });
-    handleModal(true);
+    setUserSetting({ ...userSetting, selectStoreNumber: num });
+    setModalState(true);
   };
   const onClickMarker = (num: number) => {
     console.log("onClick");
     if (!nearFoodTrunks.length) {
       return;
     }
-    setSetting({ ...setting, selectStoreNumber: num });
-    handleModal(true);
+    setUserSetting({ ...userSetting, selectStoreNumber: num });
+    setModalState(true);
     return;
   };
   const onMapIdle = (m: google.maps.Map) => {
@@ -59,10 +59,10 @@ const TopPage: React.FC<Props> = ({ foodTrunks }) => {
     if (!tmpZoom) {
       return;
     }
-    if (tmpZoom !== setting.zoom) {
-      setSetting({ ...setting, zoom: tmpZoom });
+    if (tmpZoom !== userSetting.zoom) {
+      setUserSetting({ ...userSetting, zoom: tmpZoom });
     }
-    if (!setting.searchAction) {
+    if (!userSetting.searchAction) {
       return;
     }
     const tmpCenter = m.getCenter()?.toJSON();
@@ -72,10 +72,14 @@ const TopPage: React.FC<Props> = ({ foodTrunks }) => {
     const currentFoodTrunks = filterNearFoodTrunks(
       tmpCenter,
       foodTrunks,
-      rangeOfCircle
+      userSetting.circleRange
     );
-    setNearFoodTrunks(currentFoodTrunks);
-    setSetting({ ...setting, searchAction: false, selectStoreNumber: -1 });
+    setNearFoodTrunk(currentFoodTrunks);
+    setUserSetting({
+      ...userSetting,
+      searchAction: false,
+      selectStoreNumber: -1,
+    });
   };
   const onMapDragend = (m: google.maps.Map) => {
     console.log("onDragend");
@@ -85,7 +89,7 @@ const TopPage: React.FC<Props> = ({ foodTrunks }) => {
       return;
     }
     const targetGeo = tmpCenter;
-    setSetting({ ...setting, zoom: tmpZoom, center: targetGeo });
+    setUserSetting({ ...userSetting, zoom: tmpZoom, center: targetGeo });
     return;
   };
   const onDBlclick = (e: google.maps.MapMouseEvent) => {
@@ -94,7 +98,7 @@ const TopPage: React.FC<Props> = ({ foodTrunks }) => {
       return;
     }
     const tmpCenter = e.latLng.toJSON();
-    setSetting({ ...setting, center: tmpCenter });
+    setUserSetting({ ...userSetting, center: tmpCenter });
     return;
   };
   return (
@@ -103,20 +107,20 @@ const TopPage: React.FC<Props> = ({ foodTrunks }) => {
         <CustomFab
           title={"search"}
           onClick={() => {
-            setSetting({ ...setting, searchAction: true });
+            setUserSetting({ ...userSetting, searchAction: true });
           }}
         />
         <GoogleMapComponent
           {...defaultGoogleMapOption}
-          center={setting.center}
+          center={userSetting.center}
           onIdle={onMapIdle}
           onDBlclick={onDBlclick}
           onDragend={onMapDragend}
-          zoom={setting.zoom}
-          style={{ height: "45vh" }}
+          zoom={userSetting.zoom}
+          style={{ height: gMapheight }}
         >
-          <Marker position={setting.center} />
-          <Circle {...defaultCircleOption(setting.center)} />
+          <Marker position={userSetting.center} />
+          <Circle {...defaultCircleOption(userSetting)} />
           {Object.values(nearFoodTrunks).map((marker, i) => {
             const { latitude, longitude } = marker;
             return (
@@ -130,7 +134,7 @@ const TopPage: React.FC<Props> = ({ foodTrunks }) => {
                   lat: parseFloat(latitude),
                   lng: parseFloat(longitude),
                 }}
-                icon={markerIcon(i === setting.selectStoreNumber)}
+                icon={markerIcon(i === userSetting.selectStoreNumber)}
               />
             );
           })}
@@ -141,13 +145,9 @@ const TopPage: React.FC<Props> = ({ foodTrunks }) => {
           </Box>
         )}
       </Wrapper>
-      {nearFoodTrunks[setting.selectStoreNumber] && (
+      {nearFoodTrunks[userSetting.selectStoreNumber] && (
         <AlertDialog
-          open={open}
-          foodTrunk={nearFoodTrunks[setting.selectStoreNumber]}
-          handleClose={() => {
-            handleModal(false);
-          }}
+          foodTrunk={nearFoodTrunks[userSetting.selectStoreNumber]}
         />
       )}
     </div>

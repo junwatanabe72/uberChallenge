@@ -7,11 +7,11 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogActions from "@mui/material/DialogActions";
 import { dammyImage } from "../../utils/constant";
+import { useRecoilState } from "recoil";
+import { modalState } from "../../store/atom";
 
 interface Props {
   foodTrunk: FoodTrunkPropety;
-  open: boolean;
-  handleClose: () => void;
 }
 
 const Image = styled.img`
@@ -20,7 +20,11 @@ const Image = styled.img`
   object-fit: cover;
 `;
 
-const AlertDialog: React.FC<Props> = ({ foodTrunk, open, handleClose }) => {
+const AlertDialog: React.FC<Props> = ({ foodTrunk }) => {
+  const [open, setModal] = useRecoilState(modalState);
+  const handleClose = () => {
+    setModal(false);
+  };
   const { applicant, address, fooditems } = foodTrunk;
   return (
     <Dialog

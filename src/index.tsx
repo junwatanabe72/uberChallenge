@@ -8,6 +8,7 @@ import theme from "./utils/styled/theme";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import Head from "./components/templates/Head";
+import { RecoilRoot } from "recoil";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -19,7 +20,9 @@ root.render(
       <ThemeProvider theme={theme}>
         <GlobalStyles />
         <CssBaseline />
-        <App />
+        <RecoilRoot>
+          <App />
+        </RecoilRoot>
       </ThemeProvider>
     </HelmetProvider>
   </React.StrictMode>
