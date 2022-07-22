@@ -31,7 +31,7 @@ const AlertDialog: React.FC<Props> = ({ foodTrunk }) => {
       sx={{
         "& .MuiDialog-container": {
           justifyContent: "center",
-          alignItems: "end",
+          alignItems: "center",
           "& .MuiPaper-root": {
             width: "80%",
           },

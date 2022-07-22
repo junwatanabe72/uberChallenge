@@ -108,7 +108,6 @@ const TopPage: React.FC = () => {
   return (
     <div style={{ position: "relative" }}>
       <Wrapper apiKey={process.env.REACT_APP_API_KEY as string} render={render}>
-        <DiscreteSliderMarks />
         <CustomFab title={"search"} onClick={onClickSearch} />
         <GoogleMapComponent
           {...defaultGoogleMapOption}
@@ -143,6 +142,7 @@ const TopPage: React.FC = () => {
             );
           })}
         </GoogleMapComponent>
+        <DiscreteSliderMarks />
         {nearFoodTrunks && (
           <Box p={0} m={0}>
             <FoodTrunksList onClick={onClickList} foodTrunks={nearFoodTrunks} />

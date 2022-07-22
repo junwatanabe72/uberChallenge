@@ -3,7 +3,6 @@ import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 import { useRecoilState } from "recoil";
 import { userSettingState } from "../../store/atom";
-import { Typography } from "@mui/material";
 
 const marks = [
   {
@@ -19,7 +18,6 @@ const marks = [
     label: "1500m",
   },
 ];
-const circleRange = "Change Circle";
 const SliderMarks: React.FC = () => {
   const [userSetting, setUserSetting] = useRecoilState(userSettingState);
   const handleSliderChange = (event: Event, newValue: number | number[]) => {
@@ -28,8 +26,7 @@ const SliderMarks: React.FC = () => {
   };
   return (
     <Box sx={{ display: "flex", justifyContent: "end" }}>
-      <Box px={3} sx={{ maxWidth: 150 }}>
-        <Typography gutterBottom>{circleRange}</Typography>
+      <Box px={3} sx={{ minWidth: 150 }}>
         <Slider
           key={`slider-${userSetting.circleRange}`}
           aria-label="circleRange"
