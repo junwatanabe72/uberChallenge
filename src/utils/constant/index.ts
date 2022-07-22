@@ -14,15 +14,26 @@ export const defaultUserSetting = {
   zoom: 14,
   selectStoreNumber: -1,
   circleRange: defaultRangeOfCircle,
-  center: defaultPositions,
+  searchCenter: undefined,
+  currentCenter: defaultPositions,
+} as UserSetting;
+
+export const searchCenterMarkerOption = {
+  path: "M -8,-8 8,8 M 8,-8 -8,8",
+  strokeColor: "#e100ff",
+  strokeWeight: 5.0,
+  scale: 1,
 };
 export const defaultCircleOption = (setting: UserSetting) => {
+  if (!setting.searchCenter) {
+    return;
+  }
   return {
     strokeColor: "#FF0000",
     strokeOpacity: 0.8,
     strokeWeight: 2,
     fillOpacity: 0,
-    center: setting.center,
+    center: setting.searchCenter,
     radius: setting.circleRange,
   };
 };
@@ -32,6 +43,7 @@ export const defaultGoogleMapOption = {
   minZoom: 11,
   maxZoom: 20,
 };
+
 export const dammyImage =
   "https://res.cloudinary.com/dulbhhpbj/image/upload/v1658236910/cld-sample-4.jpg";
 export const markerIcon = (isTarget: boolean) => {
