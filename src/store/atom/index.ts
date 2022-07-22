@@ -9,7 +9,6 @@ const recoilKeys = {
   nearFoodTrunkState: "nearFoodTrunkState",
   userSettingState: "userSettingState",
 } as const;
-// type RecoilKeys = typeof recoilKeys[keyof typeof recoilKeys];
 
 export const modalState = atom<boolean>({
   key: recoilKeys.modalState,

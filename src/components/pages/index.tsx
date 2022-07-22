@@ -21,6 +21,7 @@ import {
   defaultCircleOption,
   defaultGoogleMapOption,
   markerIcon,
+  searchCenterMarkerOption,
 } from "../../utils/constant";
 import { filterNearFoodTrunks } from "../../hooks/filterTrunks";
 import DiscreteSliderMarks from "../atoms/CustomSlider";
@@ -43,14 +44,16 @@ const TopPage: React.FC = () => {
   const [nearFoodTrunks, setNearFoodTrunk] = useRecoilState(nearFoodTrunkState);
 
   const onClickSearch = () => {
+    const currentCenter = userSetting.currentCenter;
     const currentFoodTrunks = filterNearFoodTrunks(
-      userSetting.center,
+      currentCenter,
       foodTrunks,
       userSetting.circleRange
     );
     setNearFoodTrunk(currentFoodTrunks);
     setUserSetting({
       ...userSetting,
+      searchCenter: currentCenter,
       selectStoreNumber: -1,
     });
     return;
@@ -84,14 +87,13 @@ const TopPage: React.FC = () => {
   };
   const onMapDragend = (m: google.maps.Map) => {
     console.log("onDragend");
-    console.log(userSetting);
     const tmpCenter = m.getCenter()?.toJSON();
     const tmpZoom = m.getZoom();
     if (!tmpCenter || !tmpZoom) {
       return;
     }
     const targetGeo = tmpCenter;
-    setUserSetting({ ...userSetting, zoom: tmpZoom, center: targetGeo });
+    setUserSetting({ ...userSetting, zoom: tmpZoom, currentCenter: targetGeo });
     return;
   };
   const onMapDBlclick = (e: google.maps.MapMouseEvent) => {
@@ -100,7 +102,7 @@ const TopPage: React.FC = () => {
       return;
     }
     const tmpCenter = e.latLng.toJSON();
-    setUserSetting({ ...userSetting, center: tmpCenter });
+    setUserSetting({ ...userSetting, currentCenter: tmpCenter });
     return;
   };
   return (
@@ -110,14 +112,18 @@ const TopPage: React.FC = () => {
         <CustomFab title={"search"} onClick={onClickSearch} />
         <GoogleMapComponent
           {...defaultGoogleMapOption}
-          center={userSetting.center}
+          center={userSetting.currentCenter}
           onIdle={onMapIdle}
           onDBlclick={onMapDBlclick}
           onDragend={onMapDragend}
           zoom={userSetting.zoom}
           style={{ height: gMapheight }}
         >
-          <Marker position={userSetting.center} />
+          <Marker position={userSetting.currentCenter} />
+          <Marker
+            position={userSetting.searchCenter}
+            icon={searchCenterMarkerOption}
+          />
           <Circle {...defaultCircleOption(userSetting)} />
           {Object.values(nearFoodTrunks).map((marker, i) => {
             const { latitude, longitude } = marker;

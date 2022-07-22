@@ -36,5 +36,6 @@ type UserSetting = {
   zoom: number;
   selectStoreNumber: number;
   circleRange: number;
-  center: { lat: number; lng: number };
+  searchCenter?: { lat: number; lng: number };
+  currentCenter: { lat: number; lng: number };
 };
