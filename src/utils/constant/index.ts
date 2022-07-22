@@ -13,7 +13,6 @@ export const foodTrnkListTextOfEmpty = "Not Result";
 export const defaultUserSetting = {
   zoom: 14,
   selectStoreNumber: -1,
-  searchAction: false,
   circleRange: defaultRangeOfCircle,
   center: defaultPositions,
 };

@@ -35,7 +35,6 @@ type FoodTrunkPropety = {
 type UserSetting = {
   zoom: number;
   selectStoreNumber: number;
-  searchAction: boolean;
   circleRange: number;
   center: { lat: number; lng: number };
 };
