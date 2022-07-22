@@ -23,6 +23,7 @@ import {
   markerIcon,
 } from "../../utils/constant";
 import { filterNearFoodTrunks } from "../../hooks/filterTrunks";
+import DiscreteSliderMarks from "../atoms/CustomSlider";
 
 const gMapheight = "45vh";
 
@@ -83,6 +84,7 @@ const TopPage: React.FC = () => {
   };
   const onMapDragend = (m: google.maps.Map) => {
     console.log("onDragend");
+    console.log(userSetting);
     const tmpCenter = m.getCenter()?.toJSON();
     const tmpZoom = m.getZoom();
     if (!tmpCenter || !tmpZoom) {
@@ -104,6 +106,7 @@ const TopPage: React.FC = () => {
   return (
     <div style={{ position: "relative" }}>
       <Wrapper apiKey={process.env.REACT_APP_API_KEY as string} render={render}>
+        <DiscreteSliderMarks />
         <CustomFab title={"search"} onClick={onClickSearch} />
         <GoogleMapComponent
           {...defaultGoogleMapOption}
