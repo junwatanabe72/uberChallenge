@@ -5,6 +5,7 @@ import { defaultUserSetting } from "../../utils/constant";
 const recoilKeys = {
   foodTrunkState: "foodTrunkState",
   modalState: "modalState",
+  currentListState: "currentListState",
   nearFoodTrunkState: "nearFoodTrunkState",
   userSettingState: "userSettingState",
 } as const;

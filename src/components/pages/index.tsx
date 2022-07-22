@@ -16,12 +16,13 @@ import FoodTrunksList from "../organisms/FoodTrunksList";
 import AlertDialog from "../atoms/CustomDialog";
 import CustomFab from "../atoms/CustomFab";
 import CenterStack from "../atoms/CenterStack";
-import { filterNearFoodTrunks } from "../../hooks/filterTrunks";
+
 import {
   defaultCircleOption,
   defaultGoogleMapOption,
   markerIcon,
 } from "../../utils/constant";
+import { filterNearFoodTrunks } from "../../hooks/filterTrunks";
 
 const gMapheight = "45vh";
 
@@ -40,6 +41,19 @@ const TopPage: React.FC = () => {
   const [userSetting, setUserSetting] = useRecoilState(userSettingState);
   const [nearFoodTrunks, setNearFoodTrunk] = useRecoilState(nearFoodTrunkState);
 
+  const onClickSearch = () => {
+    const currentFoodTrunks = filterNearFoodTrunks(
+      userSetting.center,
+      foodTrunks,
+      userSetting.circleRange
+    );
+    setNearFoodTrunk(currentFoodTrunks);
+    setUserSetting({
+      ...userSetting,
+      selectStoreNumber: -1,
+    });
+    return;
+  };
   const onClickList = (num: number) => {
     setUserSetting({ ...userSetting, selectStoreNumber: num });
     setModalState(true);
@@ -62,24 +76,10 @@ const TopPage: React.FC = () => {
     if (tmpZoom !== userSetting.zoom) {
       setUserSetting({ ...userSetting, zoom: tmpZoom });
     }
-    if (!userSetting.searchAction) {
-      return;
-    }
     const tmpCenter = m.getCenter()?.toJSON();
     if (!tmpCenter) {
       return;
     }
-    const currentFoodTrunks = filterNearFoodTrunks(
-      tmpCenter,
-      foodTrunks,
-      userSetting.circleRange
-    );
-    setNearFoodTrunk(currentFoodTrunks);
-    setUserSetting({
-      ...userSetting,
-      searchAction: false,
-      selectStoreNumber: -1,
-    });
   };
   const onMapDragend = (m: google.maps.Map) => {
     console.log("onDragend");
@@ -92,7 +92,7 @@ const TopPage: React.FC = () => {
     setUserSetting({ ...userSetting, zoom: tmpZoom, center: targetGeo });
     return;
   };
-  const onDBlclick = (e: google.maps.MapMouseEvent) => {
+  const onMapDBlclick = (e: google.maps.MapMouseEvent) => {
     console.log("onDBlclick");
     if (e.latLng === null) {
       return;
@@ -104,17 +104,12 @@ const TopPage: React.FC = () => {
   return (
     <div style={{ position: "relative" }}>
       <Wrapper apiKey={process.env.REACT_APP_API_KEY as string} render={render}>
-        <CustomFab
-          title={"search"}
-          onClick={() => {
-            setUserSetting({ ...userSetting, searchAction: true });
-          }}
-        />
+        <CustomFab title={"search"} onClick={onClickSearch} />
         <GoogleMapComponent
           {...defaultGoogleMapOption}
           center={userSetting.center}
           onIdle={onMapIdle}
-          onDBlclick={onDBlclick}
+          onDBlclick={onMapDBlclick}
           onDragend={onMapDragend}
           zoom={userSetting.zoom}
           style={{ height: gMapheight }}
