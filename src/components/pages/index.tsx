@@ -1,11 +1,5 @@
 import React, { ReactElement } from "react";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import {
-  foodTrunkState,
-  modalState,
-  nearFoodTrunkState,
-  userSettingState,
-} from "../../store/atom";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import Box from "@mui/material/Box";
 import { Wrapper, Status } from "@googlemaps/react-wrapper";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -16,15 +10,18 @@ import FoodTrunksList from "../organisms/FoodTrunksList";
 import AlertDialog from "../atoms/CustomDialog";
 import CustomFab from "../atoms/CustomFab";
 import CenterStack from "../atoms/CenterStack";
-
+import DiscreteSliderMarks from "../atoms/CustomSlider";
+import {
+  modalState,
+  userSettingState,
+  currentFoodTrunksState,
+} from "../../store/atom";
 import {
   defaultCircleOption,
   defaultGoogleMapOption,
   markerIcon,
   searchCenterMarkerOption,
 } from "../../utils/constant";
-import { filterNearFoodTrunks } from "../../hooks/filterTrunks";
-import DiscreteSliderMarks from "../atoms/CustomSlider";
 
 const gMapheight = "45vh";
 
@@ -38,24 +35,19 @@ const render = (status: Status): ReactElement => {
 };
 
 const TopPage: React.FC = () => {
-  const foodTrunks = useRecoilValue(foodTrunkState);
   const setModalState = useSetRecoilState(modalState);
   const [userSetting, setUserSetting] = useRecoilState(userSettingState);
-  const [nearFoodTrunks, setNearFoodTrunk] = useRecoilState(nearFoodTrunkState);
+  const [nearFoodTrunks, setNearFoodTrunk] = useRecoilState(
+    currentFoodTrunksState
+  );
 
   const onClickSearch = () => {
-    const currentCenter = userSetting.currentCenter;
-    const currentFoodTrunks = filterNearFoodTrunks(
-      currentCenter,
-      foodTrunks,
-      userSetting.circleRange
-    );
-    setNearFoodTrunk(currentFoodTrunks);
     setUserSetting({
       ...userSetting,
-      searchCenter: currentCenter,
+      searchCenter: userSetting.currentCenter,
       selectStoreNumber: -1,
     });
+    setNearFoodTrunk([]);
     return;
   };
   const onClickList = (num: number) => {
@@ -92,8 +84,7 @@ const TopPage: React.FC = () => {
     if (!tmpCenter || !tmpZoom) {
       return;
     }
-    const targetGeo = tmpCenter;
-    setUserSetting({ ...userSetting, zoom: tmpZoom, currentCenter: targetGeo });
+    setUserSetting({ ...userSetting, zoom: tmpZoom, currentCenter: tmpCenter });
     return;
   };
   const onMapDBlclick = (e: google.maps.MapMouseEvent) => {

@@ -1,26 +1,23 @@
-import { CircularProgress } from "@mui/material";
-import React, { Suspense } from "react";
+import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import CenterStack from "./components/atoms/CenterStack";
+import { useRecoilState } from "recoil";
 import TopPage from "./components/pages";
 import ErrorPage from "./components/pages/Error";
 import Layout from "./components/templates/Layout";
+import { fetchData } from "./hooks/fetch";
+import { foodTrunkState } from "./store/atom";
 
 const App: React.FC = (): JSX.Element => {
+  const [foodTrunks, setFoodTrunks] = useRecoilState(foodTrunkState);
+  if (foodTrunks.length === 0) {
+    throw fetchData().then(setFoodTrunks);
+  }
   const routeElement = {
     top: {
       path: "/",
       component: (
         <Layout>
-          <Suspense
-            fallback={
-              <CenterStack>
-                <CircularProgress />
-              </CenterStack>
-            }
-          >
-            <TopPage />
-          </Suspense>
+          <TopPage />
         </Layout>
       ),
     },

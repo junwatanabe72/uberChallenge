@@ -8,6 +8,9 @@ export const defaultPositions = {
   lng: -122.41926798915804,
 };
 export const fetchUrl = "https://data.sfgov.org/resource/rqzj-sfat.json";
+
+export const geoUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452&key=`;
+
 const defaultRangeOfCircle = 500;
 export const foodTrnkListTextOfEmpty = "Not Result";
 export const defaultUserSetting = {

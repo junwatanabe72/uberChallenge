@@ -20,14 +20,17 @@ const calDistance = (
 };
 
 export const filterNearFoodTrunks = (
-  targetDeo: google.maps.LatLngLiteral,
-  allFoodTrunks: FoodTrunkPropety[],
-  number: number
+  userSetting: UserSetting,
+  allFoodTrunks: FoodTrunkPropety[]
 ) => {
   if (!allFoodTrunks.length) {
     return [];
   }
-  const { lat, lng } = targetDeo;
+  const { searchCenter, circleRange } = userSetting;
+  if (!searchCenter) {
+    return [];
+  }
+  const { lat, lng } = searchCenter;
   const tmp = allFoodTrunks.filter((v) => {
     const distance = calDistance(
       lat,
@@ -35,7 +38,7 @@ export const filterNearFoodTrunks = (
       parseFloat(v.latitude),
       parseFloat(v.longitude)
     );
-    return distance < number;
+    return distance < circleRange;
   });
   return tmp;
 };

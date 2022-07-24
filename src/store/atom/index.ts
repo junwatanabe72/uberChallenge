@@ -1,13 +1,13 @@
 import { atom, selector } from "recoil";
-import { fetchData } from "../../hooks/fetch";
+import { filterNearFoodTrunks } from "../../hooks/filterTrunks";
 import { defaultUserSetting } from "../../utils/constant";
 
 const recoilKeys = {
-  foodTrunkState: "foodTrunkState",
-  modalState: "modalState",
-  currentListState: "currentListState",
-  nearFoodTrunkState: "nearFoodTrunkState",
   userSettingState: "userSettingState",
+  foodTrunkState: "foodTrunkState",
+  nearFoodTrunkState: "nearFoodTrunkState",
+  currentFoodTrunksState: "currentFoodTrunksState",
+  modalState: "modalState",
 } as const;
 
 export const modalState = atom<boolean>({
@@ -15,12 +15,9 @@ export const modalState = atom<boolean>({
   default: false,
 });
 
-export const foodTrunkState = selector<FoodTrunkPropety[]>({
+export const foodTrunkState = atom<FoodTrunkPropety[]>({
   key: recoilKeys.foodTrunkState,
-  get: async () => {
-    const foodTrunks = await fetchData();
-    return foodTrunks;
-  },
+  default: [],
 });
 export const nearFoodTrunkState = atom<FoodTrunkPropety[]>({
   key: recoilKeys.nearFoodTrunkState,
@@ -29,4 +26,16 @@ export const nearFoodTrunkState = atom<FoodTrunkPropety[]>({
 export const userSettingState = atom<UserSetting>({
   key: recoilKeys.userSettingState,
   default: defaultUserSetting,
+});
+
+export const currentFoodTrunksState = selector<FoodTrunkPropety[]>({
+  key: recoilKeys.currentFoodTrunksState,
+  get: ({ get }) => get(nearFoodTrunkState),
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  set: ({ get, set }, newValue) => {
+    const foodTrunk = get(foodTrunkState);
+    const userSetting = get(userSettingState);
+    const result = filterNearFoodTrunks(userSetting, foodTrunk);
+    set(nearFoodTrunkState, result);
+  },
 });
