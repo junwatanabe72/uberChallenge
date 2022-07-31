@@ -22,6 +22,7 @@ import {
   markerIcon,
   searchCenterMarkerOption,
 } from "../../utils/constant";
+import Layer from "../templates/googleMap/Layer";
 
 const gMapheight = "45vh";
 
@@ -53,6 +54,7 @@ const TopPage: React.FC = () => {
   const onClickList = (num: number) => {
     setUserSetting({ ...userSetting, selectStoreNumber: num });
     setModalState(true);
+    return;
   };
   const onClickMarker = (num: number) => {
     console.log("onClick");
@@ -66,16 +68,11 @@ const TopPage: React.FC = () => {
   const onMapIdle = (m: google.maps.Map) => {
     console.log("onIdle");
     const tmpZoom = m.getZoom();
-    if (!tmpZoom) {
+    if (!tmpZoom || tmpZoom === userSetting.zoom) {
       return;
     }
-    if (tmpZoom !== userSetting.zoom) {
-      setUserSetting({ ...userSetting, zoom: tmpZoom });
-    }
-    const tmpCenter = m.getCenter()?.toJSON();
-    if (!tmpCenter) {
-      return;
-    }
+    setUserSetting({ ...userSetting, zoom: tmpZoom });
+    return;
   };
   const onMapDragend = (m: google.maps.Map) => {
     console.log("onDragend");
@@ -109,6 +106,7 @@ const TopPage: React.FC = () => {
           zoom={userSetting.zoom}
           style={{ height: gMapheight }}
         >
+          <Layer />
           <Marker position={userSetting.currentCenter} />
           <Marker
             position={userSetting.searchCenter}
