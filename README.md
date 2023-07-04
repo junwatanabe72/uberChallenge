@@ -1,4 +1,5 @@
 # App: searchFoodTrunk
+ https://uberchallenge.netlify.app/
 
 ## アプリの概要と使い方
 
